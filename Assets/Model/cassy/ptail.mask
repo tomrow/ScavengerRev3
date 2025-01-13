@@ -1,0 +1,179 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ptail
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: head1
+    m_Weight: 0
+  - m_Path: head1/cassyBangs1
+    m_Weight: 0
+  - m_Path: head1/cassyBangs2
+    m_Weight: 0
+  - m_Path: head1/cassyHair
+    m_Weight: 0
+  - m_Path: head1/cassyHairAcc
+    m_Weight: 0
+  - m_Path: head1/cassyHead
+    m_Weight: 0
+  - m_Path: head1/cassyPtail
+    m_Weight: 0
+  - m_Path: head2
+    m_Weight: 0
+  - m_Path: head3
+    m_Weight: 0
+  - m_Path: head3/cubeFace
+    m_Weight: 0
+  - m_Path: head3/cubeHead
+    m_Weight: 0
+  - m_Path: larm01
+    m_Weight: 0
+  - m_Path: larm02
+    m_Weight: 0
+  - m_Path: larm03
+    m_Weight: 0
+  - m_Path: lfist01
+    m_Weight: 0
+  - m_Path: lfist02
+    m_Weight: 0
+  - m_Path: lfist03
+    m_Weight: 0
+  - m_Path: lfoot01
+    m_Weight: 0
+  - m_Path: lfoot02
+    m_Weight: 0
+  - m_Path: lfoot03
+    m_Weight: 0
+  - m_Path: lhand01
+    m_Weight: 0
+  - m_Path: lhand02
+    m_Weight: 0
+  - m_Path: lhand03
+    m_Weight: 0
+  - m_Path: lleg01
+    m_Weight: 0
+  - m_Path: lleg02
+    m_Weight: 0
+  - m_Path: lleg03
+    m_Weight: 0
+  - m_Path: neck
+    m_Weight: 0
+  - m_Path: rarm01
+    m_Weight: 0
+  - m_Path: rarm02
+    m_Weight: 0
+  - m_Path: rarm03
+    m_Weight: 0
+  - m_Path: RemoveMeFloorPlane
+    m_Weight: 0
+  - m_Path: rfist01
+    m_Weight: 0
+  - m_Path: rfist02
+    m_Weight: 0
+  - m_Path: rfist03
+    m_Weight: 0
+  - m_Path: rfoot01
+    m_Weight: 0
+  - m_Path: rfoot02
+    m_Weight: 0
+  - m_Path: rfoot03
+    m_Weight: 0
+  - m_Path: rhand01
+    m_Weight: 0
+  - m_Path: rhand02
+    m_Weight: 0
+  - m_Path: rhand03
+    m_Weight: 0
+  - m_Path: rleg01
+    m_Weight: 0
+  - m_Path: rleg02
+    m_Weight: 0
+  - m_Path: rleg03
+    m_Weight: 0
+  - m_Path: robotSkeleton
+    m_Weight: 0
+  - m_Path: robotSkeleton/leftFootIK
+    m_Weight: 0
+  - m_Path: robotSkeleton/rightFootIK
+    m_Weight: 0
+  - m_Path: robotSkeleton/root
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/lhip
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/lhip/luleg
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/lhip/luleg/llleg
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/lhip/luleg/llleg/lfoot
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/lhip/luleg/llleg/lfoot/ltoe
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/rhip
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/rhip/ruleg
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/rhip/ruleg/rlleg
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/rhip/ruleg/rlleg/rfoot
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/rhip/ruleg/rlleg/rfoot/rtoe
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/lshoulder
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/lshoulder/luarm
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/lshoulder/luarm/llarm
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/lshoulder/luarm/llarm/lwrist
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/lshoulder/luarm/llarm/lwrist/lfinger
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/neck
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/neck/head
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/neck/head/hat
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/neck/head/hat/hatPeak
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/neck/head/ptailroot
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/neck/head/ptailroot/ptail1
+    m_Weight: 1
+  - m_Path: robotSkeleton/root/spine/neck/head/ptailroot/ptail1/ptail2
+    m_Weight: 1
+  - m_Path: robotSkeleton/root/spine/neck/head/ptailroot/ptail1/ptail2/ptail3
+    m_Weight: 1
+  - m_Path: robotSkeleton/root/spine/neck/head/ptailroot/ptail1/ptail2/ptail3/ptail4
+    m_Weight: 1
+  - m_Path: robotSkeleton/root/spine/rshoulder
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/rshoulder/ruarm
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/rshoulder/ruarm/rlarm
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/rshoulder/ruarm/rlarm/rwrist
+    m_Weight: 0
+  - m_Path: robotSkeleton/root/spine/rshoulder/ruarm/rlarm/rwrist/rfinger
+    m_Weight: 0
+  - m_Path: SunPositioner001
+    m_Weight: 0
+  - m_Path: torsos
+    m_Weight: 0
+  - m_Path: torsos/torso1
+    m_Weight: 0
+  - m_Path: torsos/torso2
+    m_Weight: 0
+  - m_Path: torsos/torso3
+    m_Weight: 0
+  - m_Path: torsos/torsoBase
+    m_Weight: 0
