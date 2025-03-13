@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2940506107059480910}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 322.99213, y: 29.927185, z: -4.177429}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5580783382672884148
 MonoBehaviour:
@@ -70,9 +70,9 @@ MonoBehaviour:
   caps: 0
   boxes: 0
   currentCharacter: Alan
-  currentHead: 1
-  currentTorso: 1
-  currentArms: 01
-  currentLegs: 01
+  currentHead: 3
+  currentTorso: 3
+  currentArms: 03
+  currentLegs: 03
   reflectionSmoothness: 0
   fullScreen: 0

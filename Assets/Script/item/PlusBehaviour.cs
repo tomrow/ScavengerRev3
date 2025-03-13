@@ -36,10 +36,10 @@ public class PlusBehaviour : MonoBehaviour
         {
             gameObject.GetComponent<Collider>().enabled = false;
             //increment health by 1
-            collision.gameObject.GetComponent<GameStateVariables>().health += 1;
-            collision.gameObject.GetComponent<GameStateVariables>().score += 1;
+            GameStateVariables.health += 1;
+            GameStateVariables.score += 1;
             //if health bigger than maxhealth, then set the health to the max value, cancelling out the increase
-            if (collision.gameObject.GetComponent<GameStateVariables>().health > collision.gameObject.GetComponent<GameStateVariables>().maxHealth) { collision.gameObject.GetComponent<GameStateVariables>().health = collision.gameObject.GetComponent<GameStateVariables>().maxHealth; }
+            if (GameStateVariables.health > GameStateVariables.maxHealth) { GameStateVariables.health = GameStateVariables.maxHealth; }
 
             transform.localScale = Vector3.zero;
             collected += 1;

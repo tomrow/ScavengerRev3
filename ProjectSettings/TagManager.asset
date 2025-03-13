@@ -11,6 +11,11 @@ TagManager:
   - Selector
   - JumpStorageBoost
   - Plus
+  - shot
+  - emp
+  - corruption
+  - blob
+  - CorruptionPlatform
   layers:
   - Default
   - TransparentFX

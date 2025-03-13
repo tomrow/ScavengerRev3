@@ -9,10 +9,10 @@ using TMPro;
 
 public class GameStateVariables : MonoBehaviour
 {
-    public int health;
-    public int maxHealth = 100;
-    public int score;
-    public int boxes;
+    public static float health;
+    public static float maxHealth = 100;
+    public static int score;
+    public static int boxes;
     //public GameObject scoreDisplay;
     public TextMeshProUGUI scoreDisplay;
     public TextMeshProUGUI boxesDisplay;
@@ -32,6 +32,7 @@ public class GameStateVariables : MonoBehaviour
         //scoreDisplay = GameObject.Find("ScoreDisplay");
         //scoreDisplayText = scoreDisplay.GetComponent<Text>();
         scavengerPersistentData = playerMovementData.persistentStorage;
+        if (scavengerPersistentData == null ) {Destroy(this);}
     }
 
     // Update is called once per frame

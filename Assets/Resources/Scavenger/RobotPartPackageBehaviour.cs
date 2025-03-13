@@ -36,11 +36,11 @@ public class RobotPartPackageBehaviour : MonoBehaviour
         {
             gameObject.GetComponent<Collider>().enabled = false;
             //increment health by 1
-            collision.gameObject.GetComponent<GameStateVariables>().health = collision.gameObject.GetComponent<GameStateVariables>().maxHealth;
-            collision.gameObject.GetComponent<GameStateVariables>().boxes += 1;
+            GameStateVariables.health = GameStateVariables.maxHealth;
+            GameStateVariables.boxes += 1;
             collision.gameObject.GetComponent<PlayerMovement>().playerActionMode = PlayerMovement.Modes.FallIntoSecretDance;
             //if health bigger than maxhealth, then set the health to the max value, cancelling out the increase
-            if (collision.gameObject.GetComponent<GameStateVariables>().health > collision.gameObject.GetComponent<GameStateVariables>().maxHealth) { collision.gameObject.GetComponent<GameStateVariables>().health = collision.gameObject.GetComponent<GameStateVariables>().maxHealth; }
+            if (GameStateVariables.health > GameStateVariables.maxHealth) { GameStateVariables.health = GameStateVariables.maxHealth; }
 
             transform.localScale = Vector3.zero;
             collected += 1;

@@ -17,9 +17,10 @@ public class BloodyAi : MonoBehaviour
     AnimatorStateInfo animatorStateInfo;
     public int animMode;
     float timer;
-    bool hiding = true;
+    public bool hiding = true;
     [SerializeField] float speed;
     RaycastHit touchRay;
+    public bool relocate;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,16 +40,19 @@ public class BloodyAi : MonoBehaviour
         if (hiding)
         {
             timer = 0;
-            bonesModel.localScale = Vector3.zero;
+            if (relocate) { bonesModel.localScale = Vector3.zero; }
             float zpos = Random.Range(300, 1800);
             float xpos = Random.Range(1300, 1300+Mathf.Cos((zpos / 750) * Mathf.PI) * -900);
             xpos -= ((zpos - 300) * 0.8f);
             //slant it for map
             //^ get distance from center of zaxis
-            transform.position = new Vector3(xpos, -1000, zpos);
-            hiding = false;
-            if (Physics.Raycast(transform.position, Vector3.up, out touchRay, 3000f, 1)){ transform.position = touchRay.point; hiding = inDisplayBounds(Camera.main.WorldToViewportPoint(transform.position)); } else { hiding = true; }
-            //snap to floor, or close enough
+            //
+            if (relocate)
+            {
+                transform.position = new Vector3(xpos, -1000, zpos);
+                if (Physics.Raycast(transform.position, Vector3.up, out touchRay, 3000f, 1)) { transform.position = touchRay.point; hiding = inDisplayBounds(Camera.main.WorldToViewportPoint(transform.position)); } else { hiding = true; }
+            }//snap to floor, or close enough
+            else { hiding =false; }
             
         }
         else

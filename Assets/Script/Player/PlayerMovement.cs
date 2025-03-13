@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject persistentStoragePrefab;
     public bool pitchMod;
     public bool sonic;
-    public enum CameraMode { Chase, ChaseCinematic, Stay, ZipToLinear, ZipToDecelerate }
+    public enum CameraMode { Chase, ChaseCinematic, Stay, ZipToLinear, ZipToDecelerate, DoNothing }
     public bool cameraLooksAtCharacter = true;
     [Tooltip("For VR Only. Set this to the axis perpendicular to the horizon.")]public Vector3 cameraLookAxes;
     public CameraMode currentCameraMode = CameraMode.Chase;
@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]float turnSmoothVelocity;
     float stickPushedFromCenter;
     public Modes playerActionMode = Modes.WalkingOrIdle;
+    public float stunTimer;
     public enum Modes
     {
         WalkingOrIdle = 0,
@@ -46,6 +47,8 @@ public class PlayerMovement : MonoBehaviour
         FallIntoSecretDance = 15,
         Talking = 16,
         ExtDisableControls2 = 17,
+        Stun = 18,
+        StunFalling = 19,
         ReloadCharacter = 0x7ffffffe,
         DeathDisableControls = 0x7fffffff
     }
@@ -98,13 +101,19 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     BoxCollider hitBox;
     Vector3 initialHitBoxWidth;
+    public bool DisableSpinAttack;
+
+
+
+    public bool GetCharacterFromPersistentData;
+    public float Horizontal, Vertical, Fire1, Fire2, Fire3, RightStickHorizontal, RightStickVertical;
     void Start()
     {
         sndPlayable = true;
         if (GameObject.FindWithTag("ScavengerPersistentStorage") == null) { Debug.Log("Error, making new Persistent Storage"); persistentStorage = Instantiate(persistentStoragePrefab).GetComponent<ScavengerPersistentData>(); }
         persistentStorage = GameObject.FindWithTag("ScavengerPersistentStorage").GetComponent<ScavengerPersistentData>();
-        gameObject.GetComponent<GameStateVariables>().score = persistentStorage.caps;
-        gameObject.GetComponent<GameStateVariables>().boxes = persistentStorage.boxes;
+        GameStateVariables.score = persistentStorage.caps;
+        GameStateVariables.boxes = persistentStorage.boxes;
         hitBox = gameObject.GetComponent<BoxCollider>();
         initialHitBoxWidth = hitBox.size;
         Debug.Log("Game Start!!");
@@ -128,7 +137,7 @@ public class PlayerMovement : MonoBehaviour
         
         persistentStorage = GameObject.FindWithTag("ScavengerPersistentStorage").GetComponent<ScavengerPersistentData>();
         Debug.Log(persistentStorage);
-        characterName = persistentStorage.currentCharacter;
+        if (GetCharacterFromPersistentData) { characterName = persistentStorage.currentCharacter; }
         if (persistentStorage == null) { Debug.Log("Error, making new Persistent Storage"); persistentStorage = Instantiate(persistentStoragePrefab).GetComponent<ScavengerPersistentData>(); characterName = "Alan"; }
 
         characterAnimator = transform.Find("body");
@@ -216,11 +225,19 @@ public class PlayerMovement : MonoBehaviour
     private int CollideFloorPitchModTic(Modes leaveGround, Modes stayGround)
     {
         int notDead = 0;
-        bool rc;
+        bool rc = false;
+        bool altrc = false;
+        RaycastHit dummyrch;
         if (sonic)
         { rc = (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up) * -1f, out touchRay, transform.localScale.y * 0.6f, 1)); }
         else
-        { rc = (Physics.Raycast(transform.position, Vector3.up * -1, out touchRay, transform.localScale.y * 0.6f, 1)); }
+        {   rc = (Physics.Raycast(transform.position, Vector3.up * -1, out touchRay, transform.localScale.y * 0.6f, 1));
+            altrc = (Physics.Raycast(transform.position + (Vector3.forward * 0.2f), Vector3.up * -1, out dummyrch, transform.localScale.y * 0.5f, 1)) ||
+                (Physics.Raycast(transform.position + (Vector3.forward * -0.2f), Vector3.up * -1, out dummyrch, transform.localScale.y * 0.5f, 1)) ||
+                (Physics.Raycast(transform.position + (Vector3.right * 0.2f), Vector3.up * -1, out dummyrch, transform.localScale.y * 0.5f, 1)) ||
+                (Physics.Raycast(transform.position + (Vector3.right * -0.2f), Vector3.up * -1, out dummyrch, transform.localScale.y * 0.5f, 1));
+        }
+
         //Debug.DrawLine(transform.position, transform.position + transform.TransformDirection(transform.up * -1f), Color.red);
         //Debug.DrawLine(transform.position, transform.position + (transform.up * -1f), Color.green);
         //Debug.DrawLine(transform.position, touchRay.point, Color.blue);
@@ -272,13 +289,20 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            notDead = 2;
-            //Debug.Log("Ray was cast downward, and we got a MISS! Switching player to freefall state");
-            playerActionMode = leaveGround;
-            if (onJumpRamp)
+            if (!altrc)
             {
-                launchSoundControl.Play();
-                //play ramp launch sound
+                notDead = 2;
+                //Debug.Log("Ray was cast downward, and we got a MISS! Switching player to freefall state");
+                playerActionMode = leaveGround;
+                if (onJumpRamp)
+                {
+                    launchSoundControl.Play();
+                    //play ramp launch sound
+                }
+            }
+            else 
+            {
+                playerActionMode = stayGround; //near a gap or edge
             }
 
         }
@@ -331,7 +355,7 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.Raycast(transform.position, (new Vector3(0, -1, 0)), out touchRay, (transform.localScale.y * (0.5f + vray)), 1))
         {
             //Debug.Log("Ray was cast downward, and we got a hit! Switching back to running mode");
-            playerActionMode = reachGround;
+            playerActionMode = stunTimer>0 ? Modes.Knockback : reachGround;
             stepSnd.Play();
             if (input2.magnitude < 0.15f) { speed2 *= 0f; }
             transform.position = touchRay.point;
@@ -360,7 +384,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void MoveCharacterDuringFreeFall2Tic()
     {
-        input2 = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")); //Stick position
+        input2 = new Vector2(Horizontal, Vertical); //Stick position
         Vector2 preinputmag = input2 * runSpeed; //Multiply to reach intended speed values for later math
         float pushAngle = (Mathf.Atan2(input2.x, input2.y)) + (cameraT.eulerAngles.y * Mathf.Deg2Rad) % 360; //Get stick angle and add camera angle to it, so that forwards is always forwards relative to camera
         targetTravelAngleDeg = pushAngle * Mathf.Rad2Deg;
@@ -413,7 +437,7 @@ public class PlayerMovement : MonoBehaviour
     private void MoveCharacter5Tic()
     {
         
-        input2 = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        input2 = new Vector2(Horizontal, Vertical);
 
         Vector2 preinputmag = input2 * runSpeed; //Multiply to reach intended speed values for later math
 
@@ -539,7 +563,7 @@ public class PlayerMovement : MonoBehaviour
                 onJumpRamp = false;
             }
         }
-        if (Input.GetAxis("Fire1") == 1f)
+        if (Fire1 == 1f)
         {
             vspeed = jumpForce; // 70f;
             hspeed = 0f;
@@ -645,14 +669,17 @@ public class PlayerMovement : MonoBehaviour
     #region CameraControlsAndBehaviour
     private void OrbitCamera(Vector2 camOfs)
     {
-        Vector2 rStick = new Vector2(Input.GetAxis("RightStickHorizontal"), Input.GetAxis("RightStickVertical"));
-        camDist -= (rStick.y * 4) * Time.fixedDeltaTime;
-        //cameraT.position = transform.position + new Vector3(camOfs.x, 0, camOfs.y).normalized * (camDist*Time.fixedDeltaTime);
-        cameraT.Translate(rStick.x * Time.fixedDeltaTime * 8, 0, (rStick.y * Time.fixedDeltaTime * 4));
+        if (currentCameraMode != CameraMode.DoNothing)
+        {
+            Vector2 rStick = new Vector2(RightStickHorizontal, RightStickVertical);
+            camDist -= (rStick.y * 4) * Time.fixedDeltaTime;
+            //cameraT.position = transform.position + new Vector3(camOfs.x, 0, camOfs.y).normalized * (camDist*Time.fixedDeltaTime);
+            cameraT.Translate(rStick.x * Time.fixedDeltaTime * 8, 0, (rStick.y * Time.fixedDeltaTime * 4));
+        }
     }
     private void SpinAttack()
     {
-        if (attackCoolDownTimer >= attackCoolDownLength && Input.GetAxis("Fire2") > 0.5f)
+        if (attackCoolDownTimer >= attackCoolDownLength && Fire2 > 0.5f)
         {
             attackCoolDownTimer = 0;
             playerActionMode = Modes.SpinAttack;
@@ -664,91 +691,97 @@ public class PlayerMovement : MonoBehaviour
         
         attackCoolDownTimer += Time.fixedDeltaTime;
         attackCoolDownTimer = Mathf.Clamp(attackCoolDownTimer, 0, attackCoolDownLength);
-        Vector2 characterHorizontalPosition = new Vector2(transform.position.x, transform.position.z); ;
-        Vector2 horizontalCameraOffset = new Vector2(cameraT.position.x, cameraT.position.z) - characterHorizontalPosition;
-        if (cameraLooksAtCharacter)
-        { cameraT.LookAt(
-            transform.position +
-            transform.TransformDirection(new Vector3(
-                Mathf.Clamp(speed2.x / 16, -4, 4),
-                Mathf.Clamp(vspeed/32,-1,0),
-                Mathf.Clamp(speed2.y / 16, -4, 4) )) + Vector3.up*0.5f);
-            cameraT.localEulerAngles = new Vector3(
-                MathF.Round(cameraT.localEulerAngles.x/200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.x, 
-                MathF.Round(cameraT.localEulerAngles.y/200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.y, 
-                MathF.Round(cameraT.localEulerAngles.z/200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.z);
-            //cameraT.position = new Vector3(
-            //    MathF.Round(cameraT.position.x / 200, 3, MidpointRounding.ToEven) * 200,
-            //    MathF.Round(cameraT.position.y / 200, 3, MidpointRounding.ToEven) * 200,
-            //    MathF.Round(cameraT.position.z / 200, 3, MidpointRounding.ToEven) * 200);
+        if(currentCameraMode!=CameraMode.DoNothing){
+            Vector2 characterHorizontalPosition = new Vector2(transform.position.x, transform.position.z); ;
+            Vector2 horizontalCameraOffset = new Vector2(cameraT.position.x, cameraT.position.z) - characterHorizontalPosition;
+            if (cameraLooksAtCharacter)
+            {
+                cameraT.LookAt(
+                transform.position +
+                transform.TransformDirection(new Vector3(
+                    Mathf.Clamp(speed2.x / 16, -4, 4),
+                    Mathf.Clamp(vspeed / 32, -1, 0),
+                    Mathf.Clamp(speed2.y / 16, -4, 4))) + Vector3.up * 0.5f);
+                cameraT.localEulerAngles = new Vector3(
+                    MathF.Round(cameraT.localEulerAngles.x / 200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.x,
+                    MathF.Round(cameraT.localEulerAngles.y / 200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.y,
+                    MathF.Round(cameraT.localEulerAngles.z / 200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.z);
+                //cameraT.position = new Vector3(
+                //    MathF.Round(cameraT.position.x / 200, 3, MidpointRounding.ToEven) * 200,
+                //    MathF.Round(cameraT.position.y / 200, 3, MidpointRounding.ToEven) * 200,
+                //    MathF.Round(cameraT.position.z / 200, 3, MidpointRounding.ToEven) * 200);
 
+            }
+            switch (currentCameraMode)
+            {
+                case CameraMode.Chase:
+                    characterHorizontalPosition = new Vector2(transform.position.x, transform.position.z); ;
+                    horizontalCameraOffset = new Vector2(cameraT.position.x, cameraT.position.z) - characterHorizontalPosition;
+                    //horizontalCameraOffset = horizontalCameraOffset.normalized * (0- camDist);
+                    //Debug.Log(horizontalCameraOffset.magnitude);
+                   if (horizontalCameraOffset.magnitude > camDist)
+                    {
+                        horizontalCameraOffset = horizontalCameraOffset.normalized * (camDist);
+                        horizontalCameraOffset += characterHorizontalPosition;
+                        cameraT.position = new Vector3(horizontalCameraOffset.x, transform.position.y + camHeight, horizontalCameraOffset.y);
+                    }
+                    else
+                    { cameraT.position = new Vector3(cameraT.position.x, transform.position.y + camHeight, cameraT.position.z); }
+                    CameraZipPercentage = 0f;
+                    Vector3 dist = cameraT.position - transform.position;
+                    if (cameraLooksAtCharacter)
+                    { OrbitCamera(horizontalCameraOffset); }
+                    if (dist.magnitude < camDist * 1.5f)
+                    {
+                        dist = cameraT.position - transform.position;
+                        cameraT.Translate(Vector3.forward * (0 - Mathf.Abs(dist.magnitude - camDist)) );
+                        Debug.Log("Camera is too close to character");
+                        Debug.Log(dist.magnitude);
+                    }
+                    break;
+                case CameraMode.ChaseCinematic:
+                    characterHorizontalPosition = new Vector2(transform.position.x, transform.position.z);
+                    horizontalCameraOffset = new Vector2(cameraT.position.x, cameraT.position.z) - characterHorizontalPosition;
+                    //horizontalCameraOffset = horizontalCameraOffset.normalized * (0- camDist);
+                    //Debug.Log(horizontalCameraOffset.magnitude);
+                    if (horizontalCameraOffset.magnitude > camDist)
+                    {
+                        horizontalCameraOffset = horizontalCameraOffset.normalized * (camDist);
+                        horizontalCameraOffset += characterHorizontalPosition;
+                        cameraT.position = new Vector3(horizontalCameraOffset.x, transform.position.y + camHeight, horizontalCameraOffset.y);
+                    }
+                    //else
+                    //{ cameraT.position = new Vector3(cameraT.position.x, transform.position.y + camHeight, cameraT.position.z); }
+                    CameraZipPercentage = 0f;
+                    if (cameraLooksAtCharacter)
+                    { OrbitCamera(horizontalCameraOffset); }
+                    break;
+                case CameraMode.Stay:
+                    CameraZipPercentage = 0f;
+                    break;
+                case CameraMode.ZipToDecelerate:
+                    if (!cameraLooksAtCharacter) { cameraT.LookAt(CameraZipLookAtTarget); }
+                    if (CameraZipPercentage <= 0) { zipStartPos = cameraT.position; }
+                    CameraZipPercentage += (Time.fixedDeltaTime / CameraZipDurationSeconds);
+                    CameraZipPercentage = Mathf.Clamp01(CameraZipPercentage);
+                    cameraT.position = Vector3.Lerp(zipStartPos, CameraZipTarget, (CameraZipPercentage));
+                    if (CameraZipPercentage >= 1) { currentCameraMode = CameraMode.Stay; }
+                    break;
+                case CameraMode.ZipToLinear:
+                    if (!cameraLooksAtCharacter) { cameraT.LookAt(CameraZipLookAtTarget); }
+                    if (CameraZipPercentage <= 0) { zipStartPos = cameraT.position; }
+                    CameraZipPercentage += (Time.fixedDeltaTime / CameraZipDurationSeconds);
+                    CameraZipPercentage = Mathf.Clamp01(CameraZipPercentage);
+                    cameraT.position = Vector3.Lerp( zipStartPos, CameraZipTarget, 0.5f*( 1-Mathf.Cos(Mathf.PI*CameraZipPercentage) ) );
+                    if(CameraZipPercentage>=1) { currentCameraMode = CameraMode.Stay; }
+                    break;
+                case CameraMode.DoNothing:
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
         }
-        switch (currentCameraMode)
-        {
-            case CameraMode.Chase:
-                characterHorizontalPosition = new Vector2(transform.position.x, transform.position.z); ;
-                horizontalCameraOffset = new Vector2(cameraT.position.x, cameraT.position.z) - characterHorizontalPosition;
-                //horizontalCameraOffset = horizontalCameraOffset.normalized * (0- camDist);
-                //Debug.Log(horizontalCameraOffset.magnitude);
-                if (horizontalCameraOffset.magnitude > camDist)
-                {
-                    horizontalCameraOffset = horizontalCameraOffset.normalized * (camDist);
-                    horizontalCameraOffset += characterHorizontalPosition;
-                    cameraT.position = new Vector3(horizontalCameraOffset.x, transform.position.y + camHeight, horizontalCameraOffset.y);
-                }
-                else
-                { cameraT.position = new Vector3(cameraT.position.x, transform.position.y + camHeight, cameraT.position.z); }
-                CameraZipPercentage = 0f;
-                Vector3 dist = cameraT.position - transform.position;
-                if (cameraLooksAtCharacter)
-                { OrbitCamera(horizontalCameraOffset); }
-                if (dist.magnitude < camDist * 1.5f)
-                {
-                    dist = cameraT.position - transform.position;
-                    cameraT.Translate(Vector3.forward * (0 - Mathf.Abs(dist.magnitude - camDist)) );
-                    Debug.Log("Camera is too close to character");
-                    Debug.Log(dist.magnitude);
-                }
-                break;
-            case CameraMode.ChaseCinematic:
-                characterHorizontalPosition = new Vector2(transform.position.x, transform.position.z);
-                horizontalCameraOffset = new Vector2(cameraT.position.x, cameraT.position.z) - characterHorizontalPosition;
-                //horizontalCameraOffset = horizontalCameraOffset.normalized * (0- camDist);
-                //Debug.Log(horizontalCameraOffset.magnitude);
-                if (horizontalCameraOffset.magnitude > camDist)
-                {
-                    horizontalCameraOffset = horizontalCameraOffset.normalized * (camDist);
-                    horizontalCameraOffset += characterHorizontalPosition;
-                    cameraT.position = new Vector3(horizontalCameraOffset.x, transform.position.y + camHeight, horizontalCameraOffset.y);
-                }
-                //else
-                //{ cameraT.position = new Vector3(cameraT.position.x, transform.position.y + camHeight, cameraT.position.z); }
-                CameraZipPercentage = 0f;
-                if (cameraLooksAtCharacter)
-                { OrbitCamera(horizontalCameraOffset); }
-                break;
-            case CameraMode.Stay:
-                CameraZipPercentage = 0f;
-                break;
-            case CameraMode.ZipToDecelerate:
-                if (!cameraLooksAtCharacter) { cameraT.LookAt(CameraZipLookAtTarget); }
-                if (CameraZipPercentage <= 0) { zipStartPos = cameraT.position; }
-                CameraZipPercentage += (Time.fixedDeltaTime / CameraZipDurationSeconds);
-                CameraZipPercentage = Mathf.Clamp01(CameraZipPercentage);
-                cameraT.position = Vector3.Lerp(zipStartPos, CameraZipTarget, (CameraZipPercentage));
-                if (CameraZipPercentage >= 1) { currentCameraMode = CameraMode.Stay; }
-                break;
-            case CameraMode.ZipToLinear:
-                if (!cameraLooksAtCharacter) { cameraT.LookAt(CameraZipLookAtTarget); }
-                if (CameraZipPercentage <= 0) { zipStartPos = cameraT.position; }
-                CameraZipPercentage += (Time.fixedDeltaTime / CameraZipDurationSeconds);
-                CameraZipPercentage = Mathf.Clamp01(CameraZipPercentage);
-                cameraT.position = Vector3.Lerp( zipStartPos, CameraZipTarget, 0.5f*( 1-Mathf.Cos(Mathf.PI*CameraZipPercentage) ) );
-                if(CameraZipPercentage>=1) { currentCameraMode = CameraMode.Stay; }
-                break;
-            default:
-                throw new NotImplementedException();
-        }
+        
 
         animatorMesh.SetInteger("mode", (int)playerActionMode);
         animatorStateInfo = animatorMesh.GetCurrentAnimatorStateInfo(0); //get animation timer for animation dependent modes (knockback only ends once alan hits the floor, and only then can he get up)
@@ -769,7 +802,7 @@ public class PlayerMovement : MonoBehaviour
                 CollideWallTic();
                 JumpAbilityTic();
                 CollideFloorPitchModTic(Modes.Falling, playerActionMode);
-                SpinAttack();
+                if (!DisableSpinAttack) { SpinAttack(); }
                 playStepSoundsWhileWalking();
                 break;
             case Modes.Skid:
@@ -778,19 +811,20 @@ public class PlayerMovement : MonoBehaviour
                 CollideWallTic();
                 JumpAbilityTic();
                 CollideFloorPitchModTic(Modes.Falling, playerActionMode);
-                SpinAttack();
+                if (!DisableSpinAttack) { SpinAttack(); }
                 break;
             case Modes.Knockback:
                 //stuck
                 CollideWallTic();
                 CollideFloorPitchModTic(Modes.Falling, playerActionMode);
                 if (animatorStateInfo.IsName("knockBack") && animatorStateInfo.normalizedTime > 0.6f)
-                { playerActionMode = Modes.GetUpFromKnockback; }
+                { playerActionMode = stunTimer < 0.01f ? Modes.GetUpFromKnockback : Modes.Stun;  }
                 else
-                { 
-                    transform.position += (knockBackDir.normalized * 6) * Time.fixedDeltaTime; //go backwards when hit by enemy
+                {
+                    if (animatorStateInfo.normalizedTime < 0.6f) { transform.position += (knockBackDir.normalized * 6) * Time.fixedDeltaTime; } //go backwards when hit by enemy
                     invulnSeconds = 7;
                     speed2 = Vector2.zero;
+                    stunTimer -= Time.fixedDeltaTime;
                 }
                 break;
             case Modes.Falling:
@@ -799,7 +833,13 @@ public class PlayerMovement : MonoBehaviour
                 CollideFloorFreeFallTic(false, Modes.WalkingOrIdle);
                 CollideWallTic();
                 CollideCeilingTic();
-                SpinAttack();
+                if (!DisableSpinAttack) { SpinAttack(); }
+                break;
+            case Modes.StunFalling:
+                //falling during Stun
+                CollideFloorFreeFallTic(false, Modes.Stun);
+                CollideWallTic();
+                CollideCeilingTic();
                 break;
             case Modes.Death:
                 Debug.Log("Death");
@@ -822,14 +862,14 @@ public class PlayerMovement : MonoBehaviour
                 MoveCharacter5Tic();
                 CollideWallTic();
                 CollideFloorPitchModTic(Modes.Falling, playerActionMode);
-                SpinAttack();
+                if (!DisableSpinAttack) { SpinAttack(); }
                 JumpHesitate(); //jump windup
                 break;
             case Modes.Jumping:
                 //jumping upward animation hack
                 MoveCharacterDuringFreeFall2Tic();
-                CollideFloorFreeFallTic(Input.GetAxis("Fire1") > 0.8f, Modes.WalkingOrIdle);
-                SpinAttack();
+                CollideFloorFreeFallTic(Fire1 > 0.8f, Modes.WalkingOrIdle);
+                if (!DisableSpinAttack) { SpinAttack(); }
                 CollideWallTic();
                 CollideCeilingTic();
                 JumpSwitchToFallAnimation();
@@ -844,7 +884,9 @@ public class PlayerMovement : MonoBehaviour
                 //stuck
                 CollideWallTic();
                 if (animatorStateInfo.IsName("knockBackGetUp") && animatorStateInfo.normalizedTime > 0.9f)
-                { playerActionMode = Modes.WalkingOrIdle; }
+                { playerActionMode = Modes.WalkingOrIdle;
+                    stunTimer = 0;
+                }
                 else
                 { invulnSeconds = 7; }
                 break;
@@ -866,7 +908,7 @@ public class PlayerMovement : MonoBehaviour
                 CollideWallTic();
                 //JumpAbilityTic();
                 CollideFloorPitchModTic(Modes.Falling, playerActionMode);
-                SpinAttack();
+                if (!DisableSpinAttack) { SpinAttack(); }
                 break;
             case Modes.SecretDance:
                 invulnSeconds = 3;
@@ -884,6 +926,11 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case Modes.Talking:
                 //UI interaction code goes here
+                break;
+            case Modes.Stun:
+                //playerActionMode = stunTimer < 0.01f ? Modes.GetUpFromKnockback : Modes.Stun;
+                stunTimer -= Time.fixedDeltaTime;
+                if(stunTimer < 0.01f){CollideFloorPitchModTic(Modes.StunFalling, Modes.GetUpFromKnockback);}
                 break;
             case Modes.ReloadCharacter:
                 LoadCharacter();

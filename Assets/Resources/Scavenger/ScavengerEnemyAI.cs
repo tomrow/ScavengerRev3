@@ -199,7 +199,7 @@ public class ScavengerEnemyAI : MonoBehaviour
                 playerMovement.knockBackDir.y = 0;
                 playerMovement.knockBackDir = playerMovement.knockBackDir.normalized;
                 other.gameObject.transform.Find("Data").Find("Sound").Find("Ouch").gameObject.GetComponent<AudioSource>().Play();
-                other.gameObject.GetComponent<GameStateVariables>().health -= (int)(other.gameObject.GetComponent<GameStateVariables>().maxHealth / 4f);//have to have a float somewhere in this otherwise it will try integer division and get wrong answer
+                GameStateVariables.health -= (int)(GameStateVariables.maxHealth / 4f);//have to have a float somewhere in this otherwise it will try integer division and get wrong answer
 
             }
         }
