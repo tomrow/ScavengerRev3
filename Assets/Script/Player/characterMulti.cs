@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 
 public class characterMulti : MonoBehaviour
@@ -12,8 +13,8 @@ public class characterMulti : MonoBehaviour
     public int activeCharacter;
     public float blobWideness;
     public Transform cameraT;
-    
-    
+    public GameObject platform;
+    float platformtimer;
 
 
     // Update is called once per frame
@@ -31,16 +32,16 @@ public class characterMulti : MonoBehaviour
             phys.Fire2 = Input.GetAxis("Fire2"); //pipe controller input into active player
             phys.RightStickHorizontal = Input.GetAxis("RightStickHorizontal"); //pipe controller input into active player
             phys.RightStickVertical = Input.GetAxis("RightStickVertical"); //pipe controller input into active player
-        
-        //if (robotData == null || robotData.stunTimer <= 0)
-        //{
-        //    characters[activeCharacter].transform.position += (new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Time.deltaTime * 3);
-        //    characters[activeCharacter].transform.eulerAngles = new Vector3(0, Mathf.Atan2(stick.x, stick.y) * Mathf.Rad2Deg, 0);
-        //}
+
+            //if (robotData == null || robotData.stunTimer <= 0)
+            //{
+            //    characters[activeCharacter].transform.position += (new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Time.deltaTime * 3);
+            //    characters[activeCharacter].transform.eulerAngles = new Vector3(0, Mathf.Atan2(stick.x, stick.y) * Mathf.Rad2Deg, 0);
+            //}
             if (robotData != null) //not human
             {
                 //Debug.Log(phys.gameObject.transform.Find("body").forward);
-                if (Input.GetButtonDown("Fire2")) 
+                if (Input.GetButtonDown("Fire2"))
                 {
                     Instantiate(sGunBlast, characters[activeCharacter].transform.position, characters[activeCharacter].transform.Find("body").rotation);
                     Instantiate(sGunBlastParticles, characters[activeCharacter].transform.position, characters[activeCharacter].transform.Find("body").rotation);
@@ -52,6 +53,19 @@ public class characterMulti : MonoBehaviour
                     phys.knockBackDir = (phys.gameObject.transform.Find("body").forward * -0.4f); // - phys.gameObject.transform.position);
                     phys.knockBackDir.y = -0.5f;
                     phys.knockBackDir = phys.knockBackDir.normalized;
+                }
+            }
+            else
+            {
+                if (phys.playerActionMode == PlayerMovement.Modes.SpinAttack && !phys.SpinAttackOnGnd)
+                {
+                    platformtimer += Time.deltaTime;
+                    if (GameStateVariables.score > 0 && platformtimer > 0.2f)
+                    {
+                        platformtimer = 0f;
+                        GameStateVariables.score -= 1;
+                        GameObject b = Instantiate(platform, phys.gameObject.transform.position - (Vector3.up * 1.5f), Quaternion.identity);
+                    }
                 }
             }
         }

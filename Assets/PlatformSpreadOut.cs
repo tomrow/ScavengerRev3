@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class PlatformSpreadOut : MonoBehaviour
 {
+    public bool robotCannotUsePlatforms;
+    public GameObject blob;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -17,9 +19,15 @@ public class PlatformSpreadOut : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.tag == "CorruptionPlatform")
+        if (other.gameObject.tag == "CorruptionPlatform")
         {
             transform.position -= ((other.gameObject.transform.position - transform.position)) * Time.deltaTime;
+        }
+        else if (other.gameObject.tag == "Player" && other.gameObject.GetComponent<robot>() != null && robotCannotUsePlatforms)
+        {
+            GameObject newBlob = Instantiate(blob, other.transform);
+            newBlob.transform.position = other.ClosestPoint(transform.position);
+            Destroy(gameObject);
         }
     }
 }

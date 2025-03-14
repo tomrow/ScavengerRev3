@@ -5342,11 +5342,12 @@ MonoBehaviour:
   characters:
   - {fileID: 1058392126}
   - {fileID: 1974503060}
-  sGunBlast: {fileID: 8705771191248865788, guid: 5a3a09ca24ccb5d4ab0991d6a3e5fddc, type: 3}
+  sGunBlast: {fileID: 8705771191248865788, guid: 6f4801e756c427a4bbb37e45f0525ba2, type: 3}
   sGunBlastParticles: {fileID: 8705771191248865788, guid: 6f4801e756c427a4bbb37e45f0525ba2, type: 3}
   activeCharacter: 0
   blobWideness: 0
   cameraT: {fileID: 1524320924}
+  platform: {fileID: 3898323620614014287, guid: b805c1dfaa066ba478587214670b44bb, type: 3}
 --- !u!4 &74844637
 Transform:
   m_ObjectHideFlags: 0

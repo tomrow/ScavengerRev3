@@ -102,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
     BoxCollider hitBox;
     Vector3 initialHitBoxWidth;
     public bool DisableSpinAttack;
+    public bool SpinAttackOnGnd;
 
 
 
@@ -312,7 +313,8 @@ public class PlayerMovement : MonoBehaviour
 
     private int CollideFloorSpinAttackTic()
     {
-        if (Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0, -1, 0)), out touchRay, transform.localScale.y * 0.6f, 1))
+        SpinAttackOnGnd = (Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0, -1, 0)), out touchRay, transform.localScale.y * 0.6f, 1));
+        if (SpinAttackOnGnd)
         {
             //Debug.Log("Ray was cast downward, and we got a hit!");
             transform.position = touchRay.point;

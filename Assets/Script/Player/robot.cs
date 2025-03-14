@@ -44,6 +44,8 @@ public class robot : MonoBehaviour
         {
             transform.position = pickedUpBy.transform.position + (Vector3.up*2.0f);
         }
+        cm.blobWideness = 0.3f;
+        for (float i = 0; i <= ballsAmt; i++) { cm.blobWideness += (0.4f / ballsAmt > 1 ? ballsAmt : 1); }
 
     }
     // Update is called once per frame
@@ -68,8 +70,7 @@ public class robot : MonoBehaviour
                 GameObject newBlob = Instantiate(blob, transform);
                 newBlob.transform.position = other.ClosestPoint(transform.position);
                 corruptionCoolDownTimer += 0.2f;
-                cm.blobWideness = 0.3f;
-                for (float i = 0; i <= ballsAmt; i++) { cm.blobWideness += (0.4f / ballsAmt > 1 ? ballsAmt : 1); }
+                
                 //ballsAmt += ballsIncAmt;
             }
             //Instantiate(platform, transform.position, Quaternion.identity);

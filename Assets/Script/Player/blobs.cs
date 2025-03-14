@@ -15,7 +15,12 @@ public class blobs : MonoBehaviour
     ParticleSystem _particleSystem;
     ParticleSystem.EmissionModule _particleSystemEmissionModule;
     LineRenderer lineRenderer;
-
+    public bool AttackableOnlyWhenStunned;
+    public bool AbsorbableWhenStunned;
+    Vector3 LerpToCharacterStartPos;
+    Transform LerpTarget;
+    bool lerping;
+    float lerpPercent;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +34,7 @@ public class blobs : MonoBehaviour
         robotGO = transform.parent.gameObject;
         robot = robotGO.GetComponent<PlayerMovement>();
         lineRenderer = GetComponent<LineRenderer>();
+        lerpPercent = 0f;
     }
 
     // Update is called once per frame
@@ -39,7 +45,7 @@ public class blobs : MonoBehaviour
         lineRenderer.SetPosition(0, transform.position);
         lineRenderer.SetPosition(1, transform.parent != null ? transform.parent.position: transform.position);
         _particleSystemEmissionModule.enabled = robot.stunTimer >= 0.03f; //sparks instead of sphere
-        if (robot.stunTimer <= 0.03f)
+        if (robot.stunTimer <= 0.03f && !lerping)
         {
             transform.parent = robotGO.transform;
             transform.Translate(Vector3.right * speed * Time.deltaTime);
@@ -52,10 +58,36 @@ public class blobs : MonoBehaviour
         else 
         {
             transform.parent = null; //stop moving and dont track robot until the robots un-stunned
-            
+            if (lerping)
+            { 
+                lerpPercent += Time.deltaTime / 2;
+                transform.position = Vector3.Lerp(LerpToCharacterStartPos, LerpTarget.position, (Mathf.Tan(lerpPercent) / 1.55f) * (Mathf.Tan(lerpPercent) / 1.55f));
+                if (lerpPercent >= 1) 
+                {
+                    GameStateVariables.score += 1;
+                    Destroy(gameObject);
+                }
+            }
         }
     }
+    private void HurtPlayer(PlayerMovement pm, GameObject gmo)
+    {
 
+        pm.beingAttackedByEnemy = true;
+        pm.knockBackDir = (gmo.gameObject.transform.position - transform.position);
+        pm.knockBackDir.y = 0;
+        pm.knockBackDir = pm.knockBackDir.normalized;
+        gmo.gameObject.transform.Find("Data").Find("Sound").Find("recvAttackSnd").gameObject.GetComponent<AudioSource>().Play();
+        GameStateVariables.health -= (int)(GameStateVariables.maxHealth / 8f);//have to have a float somewhere in this otherwise it will try integer division and get wrong answer
+    }
+
+    private void KillBlobFromAttack(Transform target)
+    {
+        LerpToCharacterStartPos = transform.position;
+        LerpTarget = target;
+        lerping = true;
+        transform.parent = null;
+    }
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("Enemy");
@@ -64,14 +96,27 @@ public class blobs : MonoBehaviour
         if (other.gameObject.tag == "Player" && other.gameObject.GetComponent<robot>() == null)
         {
             PlayerMovement playerMovement = other.gameObject.GetComponent<PlayerMovement>();
-            if (playerMovement.invulnSeconds <= 0 && robot.stunTimer <= 0.03f)
+            if (AbsorbableWhenStunned && transform.parent == null)
             {
-                playerMovement.beingAttackedByEnemy = true;
-                playerMovement.knockBackDir = (other.gameObject.transform.position - transform.position);
-                playerMovement.knockBackDir.y = 0;
-                playerMovement.knockBackDir = playerMovement.knockBackDir.normalized;
-                other.gameObject.transform.Find("Data").Find("Sound").Find("recvAttackSnd").gameObject.GetComponent<AudioSource>().Play();
-                GameStateVariables.health -= (int)(GameStateVariables.maxHealth / 8f);//have to have a float somewhere in this otherwise it will try integer division and get wrong answer
+                KillBlobFromAttack(other.transform);
+            }
+            else if (playerMovement.attacking && AttackableOnlyWhenStunned && transform.parent == null)
+            {
+                KillBlobFromAttack(other.transform);
+            }
+            else if (playerMovement.attacking && AttackableOnlyWhenStunned && transform.parent != null)
+            {
+                if (playerMovement.invulnSeconds <= 0 && robot.stunTimer <= 0.03f)
+                { HurtPlayer(playerMovement, other.gameObject); }
+            }
+            else if (playerMovement.attacking && !AttackableOnlyWhenStunned )
+            {
+                KillBlobFromAttack(other.transform);
+            }
+            else
+            {
+                if (playerMovement.invulnSeconds <= 0 && robot.stunTimer <= 0.03f)
+                { HurtPlayer(playerMovement, other.gameObject); }
 
             }
         }

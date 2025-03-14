@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 596458781812911090}
   - component: {fileID: 2434011779943713838}
   m_Layer: 2
-  m_Name: Sphere
+  m_Name: growth
   m_TagString: blob
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -176,6 +176,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e323ae8ce62732245bf9a17f1e2ae6c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AttackableOnlyWhenStunned: 0
+  AbsorbableWhenStunned: 1
 --- !u!54 &1370254076235858246
 Rigidbody:
   m_ObjectHideFlags: 0
