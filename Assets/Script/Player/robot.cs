@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class robot : MonoBehaviour
 {
@@ -15,15 +16,25 @@ public class robot : MonoBehaviour
     bool oldBtn;
     GameObject pickedUpBy;
     characterMulti cm;
+    public float charge;
+    public float chargeMax;
+    public int minChildren;
+    ParticleSystem.EmissionModule _emissionModule;
     // Start is called before the first frame update
     void Start()
     {
         pm = GetComponent<PlayerMovement>();
         ballsAmt =0;
         cm=GameObject.Find("characterMulti").GetComponent<characterMulti>();
+        minChildren = transform.childCount;
+        _emissionModule = GetComponent<ParticleSystem>().emission;
+        //_emissionModule.rateOverTimeMultiplier = 0;
+        charge = chargeMax;
     }
     private void Update()
     {
+        _emissionModule.rateOverTime = Mathf.Clamp01(1-(charge/chargeMax)) * 600;
+        _emissionModule.enabled = charge < chargeMax;
         stunTimer -= Time.deltaTime;
         corruptionCoolDownTimer -= Time.deltaTime;
         if (stunTimer < 0)
@@ -35,11 +46,30 @@ public class robot : MonoBehaviour
             corruptionCoolDownTimer = 0;
         }
         ballsAmt = (transform.childCount * ballsIncAmt)/5f;
-        if (transform.childCount > 5)
+        if (transform.childCount > minChildren)
         {
-            GameStateVariables.health -= (transform.childCount / 30) * Time.deltaTime;
+            GameStateVariables.health -= (transform.childCount / 50) * Time.deltaTime;
+            charge -= (transform.childCount / 20) * Time.deltaTime;
         }
-        if(pm.stunTimer <= 0.03f) { pickedUpBy = null; }
+        if (transform.childCount <= minChildren)
+        {
+            charge += Time.deltaTime;
+        }
+        if (charge <= 0)
+        {
+            charge = 0;
+            pm.stunTimer = 5;
+            if (pm.playerActionMode != PlayerMovement.Modes.Stun && pm.playerActionMode != PlayerMovement.Modes.StunFalling && pm.playerActionMode != PlayerMovement.Modes.Knockback)
+            {
+                pm.playerActionMode = PlayerMovement.Modes.Knockback;
+                //phys.knockBackDir = (phys.gameObject.transform.Find("body").TransformPoint(Vector3.forward) - phys.gameObject.transform.position);
+                pm.knockBackDir = (gameObject.transform.Find("body").forward * -0.4f); // - phys.gameObject.transform.position);
+                pm.knockBackDir.y = -0.5f;
+                pm.knockBackDir = pm.knockBackDir.normalized * 0.4f;
+            }
+        }
+        charge = Mathf.Clamp(charge, 0, chargeMax);
+        if (pm.stunTimer <= 0.03f) { pickedUpBy = null; }
         if (pickedUpBy != null) 
         {
             transform.position = pickedUpBy.transform.position + (Vector3.up*2.0f);

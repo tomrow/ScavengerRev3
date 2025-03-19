@@ -60,7 +60,7 @@ public class blobs : MonoBehaviour
             transform.parent = null; //stop moving and dont track robot until the robots un-stunned
             if (lerping)
             { 
-                lerpPercent += Time.deltaTime / 2;
+                lerpPercent += Time.deltaTime *2f;
                 transform.position = Vector3.Lerp(LerpToCharacterStartPos, LerpTarget.position, (Mathf.Tan(lerpPercent) / 1.55f) * (Mathf.Tan(lerpPercent) / 1.55f));
                 if (lerpPercent >= 1) 
                 {
