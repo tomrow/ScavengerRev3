@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UIElements;
 
 public class robot : MonoBehaviour
@@ -20,6 +23,7 @@ public class robot : MonoBehaviour
     public float chargeMax;
     public int minChildren;
     ParticleSystem.EmissionModule _emissionModule;
+    public TextMeshProUGUI chargeDisplay;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +37,7 @@ public class robot : MonoBehaviour
     }
     private void Update()
     {
+        chargeDisplay.text = Convert.ToString((int)charge);
         _emissionModule.rateOverTime = Mathf.Clamp01(1-(charge/chargeMax)) * 600;
         _emissionModule.enabled = charge < chargeMax;
         stunTimer -= Time.deltaTime;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
@@ -15,15 +16,22 @@ public class characterMulti : MonoBehaviour
     public Transform cameraT;
     public GameObject platform;
     float platformtimer;
-
-
+    PlayerMovement robotLast;
+    PlayerMovement phys;
+    robot robotData;
+    private void Start()
+    {
+        robotLast = GameObject.Find("robot").GetComponent<PlayerMovement>();
+        robotData = characters[activeCharacter].GetComponent<robot>();
+        if (robotData != null) { robotLast = robotData.gameObject.GetComponent<PlayerMovement>(); }
+        phys = characters[activeCharacter].GetComponent<PlayerMovement>();
+    }
     // Update is called once per frame
     void Update()
     {
         if (blobWideness > 2.5f) { blobWideness -= Time.deltaTime; }
         
-        robot robotData = characters[activeCharacter].GetComponent<robot>();
-        PlayerMovement phys = characters[activeCharacter].GetComponent<PlayerMovement>();
+        
         if (phys.stunTimer <= 0.01f)
         {
             phys.Horizontal = Input.GetAxis("Horizontal"); //pipe controller input into active player
@@ -45,7 +53,7 @@ public class characterMulti : MonoBehaviour
                 {
                     Instantiate(sGunBlast, characters[activeCharacter].transform.position, characters[activeCharacter].transform.Find("body").rotation);
                     Instantiate(sGunBlastParticles, characters[activeCharacter].transform.position, characters[activeCharacter].transform.Find("body").rotation);
-                    phys.stunTimer = 10;
+                    phys.stunTimer = 20;
                     phys.playerActionMode = PlayerMovement.Modes.Knockback;
                     //phys.knockBackDir = (phys.gameObject.transform.Find("body").TransformPoint(Vector3.forward) - phys.gameObject.transform.position);
                     Debug.Log("td direction:" + phys.gameObject.transform.Find("body").TransformDirection(Vector3.forward).ToString());
@@ -57,7 +65,7 @@ public class characterMulti : MonoBehaviour
             }
             else
             {
-                if (phys.playerActionMode == PlayerMovement.Modes.SpinAttack && !phys.SpinAttackOnGnd)
+                if (phys.playerActionMode == PlayerMovement.Modes.SpinAttack && !phys.SpinAttackOnGnd && robotLast.stunTimer >= 0.5f)
                 {
                     platformtimer += Time.deltaTime;
                     if (GameStateVariables.score > 0 && platformtimer > 0.2f)
@@ -81,6 +89,9 @@ public class characterMulti : MonoBehaviour
             activeCharacter++; //switch character
             if (activeCharacter >= characters.Length)
             { activeCharacter = 0; } //loop back to start
+            robotData = characters[activeCharacter].GetComponent<robot>();
+            if (robotData != null) { robotLast = robotData.gameObject.GetComponent<PlayerMovement>(); }
+            phys = characters[activeCharacter].GetComponent<PlayerMovement>();
         }
         cameraT.position = characters[activeCharacter].transform.position;
         cameraT.eulerAngles = Vector3.right * 45;//Todo move camera to hover to average of player positions when they're in a vicinity of each other
