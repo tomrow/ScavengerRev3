@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
@@ -19,16 +20,28 @@ public class characterMulti : MonoBehaviour
     PlayerMovement robotLast;
     PlayerMovement phys;
     robot robotData;
+    LineRenderer lineRenderer;
+    Material line;
+    float scrollTimer;
     private void Start()
     {
         robotLast = GameObject.Find("robot").GetComponent<PlayerMovement>();
         robotData = characters[activeCharacter].GetComponent<robot>();
         if (robotData != null) { robotLast = robotData.gameObject.GetComponent<PlayerMovement>(); }
         phys = characters[activeCharacter].GetComponent<PlayerMovement>();
+        lineRenderer = GetComponent<LineRenderer>();
+        line = lineRenderer.material;
+        scrollTimer = 0;
     }
     // Update is called once per frame
     void Update()
     {
+        lineRenderer.SetPosition(0, characters[0].transform.position);
+        lineRenderer.SetPosition(1, characters.Length > 1 ? characters[1].transform.position : characters[0].transform.position);
+        lineRenderer.enabled = characters.Length > 1;
+        scrollTimer += Time.deltaTime;
+        if (scrollTimer > 1) { scrollTimer -= 1; }
+        line.mainTextureOffset = new Vector2(scrollTimer, 0);
         if (blobWideness > 2.5f) { blobWideness -= Time.deltaTime; }
         
         

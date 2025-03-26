@@ -38,7 +38,8 @@ public class JezBehaviour : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         if (player.GetComponent<PlayerMovement>() == null ) { Debug.Log("Why is this thing tagged as a player?"); Destroy(gameObject); }
         playerMovement = player.GetComponent<PlayerMovement>();
-        selector = GameObject.Find("/Canvas/SelectPlayer");
+        //selector = GameObject.Find("/Canvas/SelectPlayer");
+        selector = GameObject.Find("Canvas/SelectPlayer");
         if (selector == null) { Debug.Log("Where is the UI?"); Destroy(gameObject); }
         selector.transform.localScale = Vector3.zero;
         persistentStorage = GameObject.FindWithTag("ScavengerPersistentStorage").GetComponent<ScavengerPersistentData>();

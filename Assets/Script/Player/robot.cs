@@ -24,9 +24,12 @@ public class robot : MonoBehaviour
     public int minChildren;
     ParticleSystem.EmissionModule _emissionModule;
     public TextMeshProUGUI chargeDisplay;
+    public Transform btySparks;
+    float sparksAnimTimer;
     // Start is called before the first frame update
     void Start()
     {
+        sparksAnimTimer = 0;
         pm = GetComponent<PlayerMovement>();
         ballsAmt =0;
         cm=GameObject.Find("characterMulti").GetComponent<characterMulti>();
@@ -34,9 +37,14 @@ public class robot : MonoBehaviour
         _emissionModule = GetComponent<ParticleSystem>().emission;
         //_emissionModule.rateOverTimeMultiplier = 0;
         charge = chargeMax;
+        btySparks = GameObject.Find("btySparks").transform;
+
     }
     private void Update()
     {
+        sparksAnimTimer += Time.deltaTime;
+        if (sparksAnimTimer > 0.05) { sparksAnimTimer = 0; btySparks.Rotate(0, 0, 180); }
+        btySparks.localScale = pm.stunTimer > 0 ? Vector3.one : Vector3.zero;
         chargeDisplay.text = Convert.ToString((int)charge);
         _emissionModule.rateOverTime = Mathf.Clamp01(1-(charge/chargeMax)) * 600;
         _emissionModule.enabled = charge < chargeMax;

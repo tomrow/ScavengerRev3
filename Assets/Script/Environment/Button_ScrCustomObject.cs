@@ -17,6 +17,7 @@ public class Button_ScrCustomObject : MonoBehaviour
     int buttonDownDuration;
     int lastknownplayer;
     AudioSource audioData;
+    float riseTimer;
     // Start is called before the first frame update.
     void Start()
     {
@@ -46,10 +47,17 @@ public class Button_ScrCustomObject : MonoBehaviour
                 buttonDown = false;
             }
         }
+        riseTimer += Time.deltaTime;
+        if(riseTimer > 0.3f && buttonDown2 == true) 
+        {
+            audioData.Play();
+            buttonDown2 = false;
+            riseTimer = 0;
+        }
                        
         //Debug.Log(buttonDownDuration);
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         Debug.Log(other.gameObject.name);
 
@@ -57,7 +65,7 @@ public class Button_ScrCustomObject : MonoBehaviour
 
         if(other.gameObject.name == "BUTTONBASE")
         {
-            Debug.Log("FALSEALARM");
+            Debug.Log("False alarm");
         }
 
 
@@ -65,12 +73,14 @@ public class Button_ScrCustomObject : MonoBehaviour
         
         if (other.gameObject.name == actuator)
         {
+            if(buttonDown2 == false) { audioData.Play(); }
             buttonDown2 = true;
-            audioData.Play();
+            
             Debug.Log("Player has interacted. SUCCESS!");
             
 
         }
+        riseTimer = 0;
 
     }
     private void OnTriggerExit(Collider other)
