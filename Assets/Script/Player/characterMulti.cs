@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+
 
 
 public class characterMulti : MonoBehaviour
@@ -23,11 +22,17 @@ public class characterMulti : MonoBehaviour
     LineRenderer lineRenderer;
     Material line;
     float scrollTimer;
+    robot robotDataLast;
+    float glitchTimer;
     private void Start()
     {
         robotLast = GameObject.Find("robot").GetComponent<PlayerMovement>();
         robotData = characters[activeCharacter].GetComponent<robot>();
-        if (robotData != null) { robotLast = robotData.gameObject.GetComponent<PlayerMovement>(); }
+        if (robotData != null) 
+        { 
+            robotLast = robotData.gameObject.GetComponent<PlayerMovement>();
+            robotDataLast = robotLast.gameObject.GetComponent<robot>();
+        }
         phys = characters[activeCharacter].GetComponent<PlayerMovement>();
         lineRenderer = GetComponent<LineRenderer>();
         line = lineRenderer.material;
@@ -43,8 +48,8 @@ public class characterMulti : MonoBehaviour
         if (scrollTimer > 1) { scrollTimer -= 1; }
         line.mainTextureOffset = new Vector2(scrollTimer, 0);
         if (blobWideness > 2.5f) { blobWideness -= Time.deltaTime; }
-        
-        
+
+
         if (phys.stunTimer <= 0.01f)
         {
             phys.Horizontal = Input.GetAxis("Horizontal"); //pipe controller input into active player
@@ -59,6 +64,7 @@ public class characterMulti : MonoBehaviour
             //    characters[activeCharacter].transform.position += (new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Time.deltaTime * 3);
             //    characters[activeCharacter].transform.eulerAngles = new Vector3(0, Mathf.Atan2(stick.x, stick.y) * Mathf.Rad2Deg, 0);
             //}
+
             if (robotData != null) //not human
             {
                 //Debug.Log(phys.gameObject.transform.Find("body").forward);
@@ -89,8 +95,8 @@ public class characterMulti : MonoBehaviour
                     }
                 }
             }
-        }
 
+        }
         if (Input.GetButtonDown("Fire3"))
         {
             phys.Horizontal = 0;
@@ -103,11 +109,44 @@ public class characterMulti : MonoBehaviour
             if (activeCharacter >= characters.Length)
             { activeCharacter = 0; } //loop back to start
             robotData = characters[activeCharacter].GetComponent<robot>();
-            if (robotData != null) { robotLast = robotData.gameObject.GetComponent<PlayerMovement>(); }
+            if (robotData != null)
+            {
+                robotLast = robotData.gameObject.GetComponent<PlayerMovement>();
+                robotDataLast = robotLast.gameObject.GetComponent<robot>();
+            }
             phys = characters[activeCharacter].GetComponent<PlayerMovement>();
         }
         cameraT.position = characters[activeCharacter].transform.position;
         cameraT.eulerAngles = Vector3.right * 45;//Todo move camera to hover to average of player positions when they're in a vicinity of each other
         cameraT.Translate(Vector3.forward * -6);
+        if (robotDataLast.transform.childCount > UnityEngine.Random.Range(4, 100))
+        {
+            robotLast.Horizontal = UnityEngine.Random.Range(-1f, 1f);
+            robotLast.Vertical = UnityEngine.Random.Range(-1f, 1f);
+            robotLast.Fire1 = UnityEngine.Random.Range(0f, 1f);
+            robotLast.Fire2 = UnityEngine.Random.Range(0f, 1f);
+        }
+        else
+        {
+            if (robotData != null)
+            {
+                robotLast.Horizontal = Input.GetAxis("Horizontal"); //pipe controller input into active player
+                robotLast.Vertical = Input.GetAxis("Vertical"); //pipe controller input into active player
+                robotLast.Fire1 = Input.GetAxis("Fire1"); //pipe controller input into active player
+                robotLast.Fire2 = Input.GetAxis("Fire2"); //pipe controller input into active player
+                robotLast.RightStickHorizontal = Input.GetAxis("RightStickHorizontal"); //pipe controller input into active player
+                robotLast.RightStickVertical = Input.GetAxis("RightStickVertical"); //pipe controller input into active player }
+            }
+            else
+            {
+                robotLast.Horizontal = 0;
+                robotLast.Vertical = 0;
+                robotLast.Fire1 = 0;
+                robotLast.Fire2 = 0;
+                robotLast.RightStickHorizontal = 0;
+                robotLast.RightStickVertical = 0;
+            }
+        }
+
     }
 }
