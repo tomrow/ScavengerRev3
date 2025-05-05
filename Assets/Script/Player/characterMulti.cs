@@ -24,6 +24,8 @@ public class characterMulti : MonoBehaviour
     float scrollTimer;
     robot robotDataLast;
     float glitchTimer;
+    public PlayerMovement.CameraMode currentCameraMode = PlayerMovement.CameraMode.Chase;
+    public bool OldOverheadCamera;
     private void Start()
     {
         robotLast = GameObject.Find("robot").GetComponent<PlayerMovement>();
@@ -37,6 +39,8 @@ public class characterMulti : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         line = lineRenderer.material;
         scrollTimer = 0;
+        phys.currentCameraMode = PlayerMovement.CameraMode.Chase;
+        phys.cameraLooksAtCharacter = true;
     }
     // Update is called once per frame
     void Update()
@@ -105,6 +109,9 @@ public class characterMulti : MonoBehaviour
             phys.Fire2 = 0;
             phys.RightStickHorizontal = 0;
             phys.RightStickVertical = 0; //clear out old input so the previous character stands still and doesnt run off
+            phys.currentCameraMode = PlayerMovement.CameraMode.DoNothing;
+            phys.cameraLooksAtCharacter = false;
+            //phys.currentCameraMode = PlayerMovement.CameraMode.DoNothing;
             activeCharacter++; //switch character
             if (activeCharacter >= characters.Length)
             { activeCharacter = 0; } //loop back to start
@@ -115,10 +122,16 @@ public class characterMulti : MonoBehaviour
                 robotDataLast = robotLast.gameObject.GetComponent<robot>();
             }
             phys = characters[activeCharacter].GetComponent<PlayerMovement>();
+            phys.currentCameraMode = PlayerMovement.CameraMode.Chase;
+            phys.cameraLooksAtCharacter = true;
         }
-        cameraT.position = characters[activeCharacter].transform.position;
-        cameraT.eulerAngles = Vector3.right * 45;//Todo move camera to hover to average of player positions when they're in a vicinity of each other
-        cameraT.Translate(Vector3.forward * -6);
+        if (OldOverheadCamera)
+        {
+            cameraT.position = characters[activeCharacter].transform.position;
+            cameraT.eulerAngles = Vector3.right * 45;//Todo move camera to hover to average of player positions when they're in a vicinity of each other
+            cameraT.Translate(Vector3.forward * -6);
+        }
+        
         if (robotDataLast.transform.childCount > UnityEngine.Random.Range(4, 100))
         {
             robotLast.Horizontal = UnityEngine.Random.Range(-1f, 1f);

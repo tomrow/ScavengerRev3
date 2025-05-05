@@ -16,6 +16,7 @@ TagManager:
   - corruption
   - blob
   - CorruptionPlatform
+  - goal
   layers:
   - Default
   - TransparentFX

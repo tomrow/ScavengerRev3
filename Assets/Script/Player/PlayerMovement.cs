@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject persistentStoragePrefab;
     public bool pitchMod;
     public bool sonic;
-    public enum CameraMode { Chase, ChaseCinematic, Stay, ZipToLinear, ZipToDecelerate, DoNothing }
+    public enum CameraMode { Chase, ChaseCinematic, Stay, ZipToLinear, ZipToDecelerate, DoNothing, Overhead}
     public bool cameraLooksAtCharacter = true;
     [Tooltip("For VR Only. Set this to the axis perpendicular to the horizon.")]public Vector3 cameraLookAxes;
     public CameraMode currentCameraMode = CameraMode.Chase;
@@ -106,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
+    public bool onDesertedGoal = false;
     public bool GetCharacterFromPersistentData;
     public float Horizontal, Vertical, Fire1, Fire2, Fire3, RightStickHorizontal, RightStickVertical;
     void Start()
@@ -778,6 +779,9 @@ public class PlayerMovement : MonoBehaviour
                     if(CameraZipPercentage>=1) { currentCameraMode = CameraMode.Stay; }
                     break;
                 case CameraMode.DoNothing:
+                    break;
+                case CameraMode.Overhead:
+                    cameraT.position = transform.position + (Vector3.up * 15) + (Vector3.forward * -15);
                     break;
                 default:
                     throw new NotImplementedException();
