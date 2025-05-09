@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class RisingDoor : MonoBehaviour
 {
@@ -10,10 +11,14 @@ public class RisingDoor : MonoBehaviour
     public float speedMultiplier;
     public float openOffset;
     Vector3 origin;
+    public float upDuration;
+    float upTimer;
+    public Vector3 moveDirection;
     // Start is called before the first frame update
     void Start()
     {
         origin = transform.position;
+        
     }
 
     // Update is called once per frame
@@ -29,14 +34,15 @@ public class RisingDoor : MonoBehaviour
         {
             lerpTimer += Time.deltaTime * speedMultiplier;
             lerpTimer = Mathf.Clamp01(lerpTimer);
-
+            upTimer = 0;
         }
-        else
+        else if (upTimer > upDuration)
         {
             lerpTimer -= Time.deltaTime * speedMultiplier;
             lerpTimer = Mathf.Clamp01(lerpTimer);
 
         }
-        transform.position = origin + (Vector3.up * openOffset * lerpTimer);
+        else { upTimer += Time.deltaTime; }
+            transform.position = origin + (moveDirection * openOffset * lerpTimer);
     }
 }

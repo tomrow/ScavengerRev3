@@ -263,6 +263,8 @@ MonoBehaviour:
   blobWideness: 0
   cameraT: {fileID: 0}
   platform: {fileID: 3898323620614014287, guid: b805c1dfaa066ba478587214670b44bb, type: 3}
+  currentCameraMode: 0
+  OldOverheadCamera: 0
 --- !u!120 &6688077831174170282
 LineRenderer:
   serializedVersion: 2
@@ -738,6 +740,10 @@ PrefabInstance:
       value: ScavengerVRCamera
       objectReference: {fileID: 0}
     - target: {fileID: 4860053891540669533, guid: bb930dd9b59e2e447988548c01968429, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860053891540669533, guid: bb930dd9b59e2e447988548c01968429, type: 3}
       propertyPath: m_CustomSkybox
       value: 
       objectReference: {fileID: 2100000, guid: 296f50ab147bdad4280ff033a2d35ab5, type: 2}
@@ -784,25 +790,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4860053890910920363, guid: bb930dd9b59e2e447988548c01968429, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4353465607707535908}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb930dd9b59e2e447988548c01968429, type: 3}
---- !u!1 &5384404733956229016 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4860053890910920363, guid: bb930dd9b59e2e447988548c01968429, type: 3}
-  m_PrefabInstance: {fileID: 705762016130013491}
-  m_PrefabAsset: {fileID: 0}
---- !u!45 &4353465607707535908
-Skybox:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5384404733956229016}
-  m_Enabled: 1
-  m_CustomSkybox: {fileID: 2100000, guid: 296f50ab147bdad4280ff033a2d35ab5, type: 2}
 --- !u!4 &5384404733956229018 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4860053890910920361, guid: bb930dd9b59e2e447988548c01968429, type: 3}
@@ -890,7 +879,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: runSpeed
-      value: 200
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: debugCube
@@ -926,7 +915,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: gndAccelleration
-      value: 0.08
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: DisableSpinAttack
@@ -942,7 +931,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: speedAffectedBySlopes
-      value: 15
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: cameraLooksAtCharacter
@@ -1239,7 +1228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: characterName
-      value: Robot
+      value: Craig
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: airAccelleration
@@ -1255,7 +1244,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: gndAccelleration
-      value: 0.08
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: DisableSpinAttack

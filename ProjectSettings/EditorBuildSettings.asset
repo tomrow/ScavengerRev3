@@ -6,8 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Resources/Deserted/Levels/Scenes/DTutorial.unity
+    guid: 7328717f5cca37941a88ff4cc415272a
+  - enabled: 1
+    path: Assets/Resources/Deserted/Levels/Scenes/DLevel1.unity
+    guid: 774f107eb43a3b34b9e545f695932c82
+  - enabled: 1
     path: Assets/aigame.unity
     guid: 0c0f933f1984e2d429a6525df9f69e1a
+  - enabled: 1
+    path: Assets/Resources/Deserted/Levels/Scenes/DLevel2.unity
+    guid: a5098a0326512ed40bc4d81ca34fc172
+  - enabled: 1
+    path: Assets/Resources/Deserted/Levels/Scenes/DLevel3.unity
+    guid: 7b70acb33a4aeb542bbac30716e07668
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 1a4c68ca72a83449f938d669337cb305, type: 2}

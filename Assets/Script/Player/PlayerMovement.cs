@@ -852,7 +852,7 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log(playerActionMode);
                 //death
                 deathTimer += Time.fixedDeltaTime;
-                if (characterName == "Robot" && animatorStateInfo.IsName("knockBack") && animatorStateInfo.normalizedTime > 0.5f && !explosionSpawned)
+                if ((characterName == "Robot" || characterName == "Craig") && animatorStateInfo.IsName("knockBack") && animatorStateInfo.normalizedTime > 0.5f && !explosionSpawned)
                 { Instantiate(robotDeathExplosionPrefab, transform.position, Quaternion.identity); Debug.Log("Boom"); explosionSpawned = true; characterAnimator.gameObject.SetActive(false); }
                 if (deathTimer > deathTimerMax)
                 {
