@@ -418,6 +418,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 986209875817599970, guid: 32d7be1197ecf1348b59e72c8e4c791d, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 320
+      objectReference: {fileID: 0}
+    - target: {fileID: 986209875817599970, guid: 32d7be1197ecf1348b59e72c8e4c791d, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 240
+      objectReference: {fileID: 0}
     - target: {fileID: 3857441355883021992, guid: 32d7be1197ecf1348b59e72c8e4c791d, type: 3}
       propertyPath: m_LocalScale.x
       value: 0
@@ -790,8 +798,64 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4860053891540669530, guid: bb930dd9b59e2e447988548c01968429, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4703681240566925287}
+    - targetCorrespondingSourceObject: {fileID: 4860053891540669530, guid: bb930dd9b59e2e447988548c01968429, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5784049725171305522}
   m_SourcePrefab: {fileID: 100100000, guid: bb930dd9b59e2e447988548c01968429, type: 3}
+--- !u!1 &5384404733210250601 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4860053891540669530, guid: bb930dd9b59e2e447988548c01968429, type: 3}
+  m_PrefabInstance: {fileID: 705762016130013491}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4703681240566925287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5384404733210250601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 433faa8b758afed4f9295b193c697276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _PixelationFactor: 1
+  _ColorEmulationMode: 3
+  _FullscreenColorDepth: {x: 256, y: 256, z: 256}
+  _FullscreenDitherDepth: {x: 32, y: 32, z: 32}
+  _DitheringMatrixSize: 2
+  _DitheringScale: 1
+  _InterlacingSize: 1
+  _PostProcessShader: {fileID: 4800000, guid: 56d52fd5b7c6911468179e5a7359ce0e, type: 3}
+  _PostProcessShaderAccurate: {fileID: 4800000, guid: 2ebed186567d3c244a87538744a62920, type: 3}
+  _PixelationShader: {fileID: 4800000, guid: f2da0e2a14a532548b5db043244b3df1, type: 3}
+  _InterlacingShader: {fileID: 4800000, guid: 03ebd34214b41ef459d7ee6753b062be, type: 3}
+--- !u!114 &5784049725171305522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5384404733210250601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1a4c69f7a9d3ea43907b5765229dc85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _TextureWarpingFactor: 0.009
+  _TextureWarpingMode: 1
+  _VertexGridResolution: 240
+  _VertexWobbleMode: 0
+  _UseRetroVertexLighting: 1
+  _RetroLightingNormalFactor: 1
+  _RetroLightFalloffStart: 0.202
+  _FlatShadingMode: 1
+  _TriangleSortMode: 0
+  _DepthDebugView: 0
 --- !u!4 &5384404733956229018 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4860053890910920361, guid: bb930dd9b59e2e447988548c01968429, type: 3}
@@ -899,7 +963,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: characterName
-      value: Alan
+      value: DesertedHmn
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: airAccelleration

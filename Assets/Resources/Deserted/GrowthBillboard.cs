@@ -19,5 +19,8 @@ public class GrowthBillboard : MonoBehaviour
     {
         transform.LookAt(mainCamera, Vector3.up); //always point toward camera
         transform.Rotate(Vector3.up * 180);
+        transform.Rotate(0, 0, UnityEngine.Random.Range(0f, 360f));
+        if (UnityEngine.Random.Range(0f,1f)<0.2f)
+        { transform.localScale = new Vector3(UnityEngine.Random.Range(0.5f, 1.3f), UnityEngine.Random.Range(0.5f, 1.3f), UnityEngine.Random.Range(0.5f, 1.3f)); }
     }
 }
