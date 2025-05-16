@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 public class PlatformSpreadOut : MonoBehaviour
@@ -7,6 +8,7 @@ public class PlatformSpreadOut : MonoBehaviour
     public bool robotCannotUsePlatforms;
     public GameObject blob;
     robot r;
+    public bool hazardous;
     PlayerMovement playerMovement;
     // Start is called before the first frame update
     void Start()
@@ -46,7 +48,18 @@ public class PlatformSpreadOut : MonoBehaviour
         else if (other.gameObject.tag == "Player" && (playerMovement.stunTimer <= 0))
         { //pain
 
-            if (playerMovement.invulnSeconds <= 0 && r.stunTimer <= 0.03f)
+            if (playerMovement.invulnSeconds <= 0 && r.stunTimer <= 0.03f && hazardous)
+            { //HurtPlayer(opm, other.gameObject);
+            }
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        PlayerMovement opm = other.gameObject.GetComponent<PlayerMovement>();
+        if (other.gameObject.tag == "Player" && (playerMovement.stunTimer <= 0))
+        { //pain
+
+            if (playerMovement.invulnSeconds <= 0 && r.stunTimer <= 0.03f && hazardous)
             { HurtPlayer(opm, other.gameObject); }
         }
     }

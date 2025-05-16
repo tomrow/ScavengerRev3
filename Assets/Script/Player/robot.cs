@@ -26,9 +26,12 @@ public class robot : MonoBehaviour
     public TextMeshProUGUI chargeDisplay;
     public Transform btySparks;
     float sparksAnimTimer;
+    AudioSource sound;
+
     // Start is called before the first frame update
     void Start()
     {
+        sound = GetComponent<AudioSource>();
         sparksAnimTimer = 0;
         pm = GetComponent<PlayerMovement>();
         ballsAmt =0;
@@ -42,6 +45,7 @@ public class robot : MonoBehaviour
     }
     private void Update()
     {
+        sound.pitch = (pm.speed2.magnitude / pm.runSpeed)+1;
         sparksAnimTimer += Time.deltaTime;
         if (sparksAnimTimer > 0.05) { sparksAnimTimer = 0; btySparks.Rotate(0, 0, 180); }
         btySparks.localScale = pm.stunTimer > 0 ? Vector3.one : Vector3.zero;

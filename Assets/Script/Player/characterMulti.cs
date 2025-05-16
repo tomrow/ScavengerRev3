@@ -91,13 +91,14 @@ public class characterMulti : MonoBehaviour
                 if (phys.playerActionMode == PlayerMovement.Modes.SpinAttack && !phys.SpinAttackOnGnd && robotLast.stunTimer >= 0.5f)
                 {
                     platformtimer += Time.deltaTime;
-                    if (GameStateVariables.score > 0 && platformtimer > 0.2f)
+                    if (GameStateVariables.score > 0 && platformtimer > 0.1f)
                     {
                         platformtimer = 0f;
                         GameStateVariables.score -= 1;
                         GameObject b = Instantiate(platform, phys.gameObject.transform.position - (Vector3.up * 1.5f), Quaternion.identity);
                     }
                 }
+                else { platformtimer = 0f; }
             }
 
         }
