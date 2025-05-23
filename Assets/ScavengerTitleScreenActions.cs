@@ -17,6 +17,9 @@ public class ScavengerTitleScreenActions : MonoBehaviour
         { ShowCredits(); }
         if ((Input.GetAxis("Fire3") > 0.5f))
         { Application.Quit(); }
+        if ((Input.GetAxis("Cancel") > 0.5f))
+        { Screen.fullScreen = !Screen.fullScreen;
+        }
     }
 
     public void ShowCredits()
