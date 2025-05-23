@@ -41063,18 +41063,6 @@ PrefabInstance:
       value: desertedPack
       objectReference: {fileID: 0}
     - target: {fileID: 8852485751039363661, guid: a03462af751b62a4ebd87e345574732b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8852485751039363661, guid: a03462af751b62a4ebd87e345574732b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8852485751039363661, guid: a03462af751b62a4ebd87e345574732b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8852485751039363661, guid: a03462af751b62a4ebd87e345574732b, type: 3}
       propertyPath: m_LocalPosition.y
       value: -464.41
       objectReference: {fileID: 0}

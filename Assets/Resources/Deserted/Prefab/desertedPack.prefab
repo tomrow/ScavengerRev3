@@ -1071,6 +1071,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8113234533985866452, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9051431324025114966}
+    - targetCorrespondingSourceObject: {fileID: 8113234533985866452, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8843677349416084351}
     - targetCorrespondingSourceObject: {fileID: 5983547554024873207, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7424494675707334732}
@@ -1163,6 +1166,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 1.39, z: 0.7300001}
   m_Center: {x: 0, y: -0.1, z: 0}
+--- !u!122 &8843677349416084351
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6049035580537800644}
+  m_Enabled: 1
+  m_Color:
+    serializedVersion: 2
+    rgba: 4278202464
+  m_Size: 3.19
 --- !u!4 &6393331787431927166 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8925060780611111022, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
@@ -1428,6 +1443,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8113234533985866452, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2229947890900102028}
+    - targetCorrespondingSourceObject: {fileID: 8113234533985866452, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2041841455298891819}
     - targetCorrespondingSourceObject: {fileID: 5983547554024873207, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 684272135358648686}
@@ -6483,6 +6501,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!122 &2041841455298891819
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3255170744453988473}
+  m_Enabled: 1
+  m_Color:
+    serializedVersion: 2
+    rgba: 4284483328
+  m_Size: 3.19
 --- !u!1001 &7151562971519845201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6494,6 +6524,18 @@ PrefabInstance:
     - target: {fileID: 1865946285072156955, guid: 647015f9e3de8d74b944703b4ed30503, type: 3}
       propertyPath: m_Name
       value: jez
+      objectReference: {fileID: 0}
+    - target: {fileID: 1865946285072156956, guid: 647015f9e3de8d74b944703b4ed30503, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1865946285072156956, guid: 647015f9e3de8d74b944703b4ed30503, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1865946285072156956, guid: 647015f9e3de8d74b944703b4ed30503, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1865946285072156956, guid: 647015f9e3de8d74b944703b4ed30503, type: 3}
       propertyPath: m_LocalPosition.x
