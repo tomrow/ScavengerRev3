@@ -991,7 +991,7 @@ PrefabInstance:
       objectReference: {fileID: 2767286216817204435}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: currentCameraMode
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: speedAffectedBySlopes
