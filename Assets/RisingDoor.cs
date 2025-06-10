@@ -14,13 +14,18 @@ public class RisingDoor : MonoBehaviour
     public float upDuration;
     float upTimer;
     public Vector3 moveDirection;
+    public GameObject explosion;
     // Start is called before the first frame update
+    bool exploded = false;
+    bool explode;
+    float scale;
     void Start()
     {
-        origin = transform.position;
-        
+        origin = transform.localPosition;
+        explode = explosion != null; //if there is an explosion prefab selected, treat the door as rigged to blow
+        scale = transform.InverseTransformDirection(Vector3.forward).magnitude;
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -29,20 +34,28 @@ public class RisingDoor : MonoBehaviour
         {
             Button_ScrCustomObject btnData = button.GetComponent<Button_ScrCustomObject>();
             active = active || btnData.buttonDown;
+            
         }
+
         if (active)
         {
             lerpTimer += Time.deltaTime * speedMultiplier;
-            lerpTimer = Mathf.Clamp01(lerpTimer);
+            
             upTimer = 0;
         }
-        else if (upTimer > upDuration)
+        else if ((upTimer > upDuration) && exploded == false) //do not close exploded doors
         {
             lerpTimer -= Time.deltaTime * speedMultiplier;
             lerpTimer = Mathf.Clamp01(lerpTimer);
 
         }
         else { upTimer += Time.deltaTime; }
-            transform.position = origin + (moveDirection * openOffset * lerpTimer);
+        lerpTimer = Mathf.Clamp01(lerpTimer);
+        if (lerpTimer > 0.8f) 
+        {
+            if (explode == true && exploded == false)
+            { Instantiate(explosion, transform.position, Quaternion.identity); exploded = true; }
+        }
+        transform.localPosition = origin + (moveDirection * scale * openOffset * lerpTimer);
     }
 }

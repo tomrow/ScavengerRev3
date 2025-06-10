@@ -2690,7 +2690,7 @@ MonoBehaviour:
   stunTimer: 0
   inputmag: {x: 0, y: 0}
   gndAccelleration: 0.49
-  airAccelleration: 0.6
+  airAccelleration: 0.1
   gndFriction: 0.99
   airFriction: 0.9
   cameraT: {fileID: 0}

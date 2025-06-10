@@ -946,6 +946,10 @@ PrefabInstance:
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
+      propertyPath: camHeight
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: debugCube
       value: 
       objectReference: {fileID: 2444849154674339540}
@@ -967,7 +971,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: airAccelleration
-      value: 0.05
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: cameraLookAxes.x
@@ -1310,6 +1314,10 @@ PrefabInstance:
       value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
+      propertyPath: camHeight
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: jumpForce
       value: 9.3
       objectReference: {fileID: 0}
@@ -1324,10 +1332,6 @@ PrefabInstance:
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: characterName
       value: Craig
-      objectReference: {fileID: 0}
-    - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
-      propertyPath: airAccelleration
-      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 8113234533985866451, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       propertyPath: cameraLookAxes.x

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6587546156663382757}
   - component: {fileID: 1291466610611014225}
   - component: {fileID: 3602958485470717192}
+  - component: {fileID: 3165905883364884601}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -83,6 +84,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3165905883364884601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042806411103402094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb163e66f200868489be542db95f20a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollDir: {x: 0.2, y: 0.02}
 --- !u!1 &3898323620614014287
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,6 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   robotCannotUsePlatforms: 1
   blob: {fileID: 3898323620614014287, guid: b3ac371e94a65474abc7560793dfcd18, type: 3}
+  hazardous: 0
 --- !u!65 &5711857879062813651
 BoxCollider:
   m_ObjectHideFlags: 0

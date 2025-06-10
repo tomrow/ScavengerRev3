@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject persistentStoragePrefab;
     public bool pitchMod;
     public bool sonic;
-    public enum CameraMode { Chase, ChaseCinematic, Stay, ZipToLinear, ZipToDecelerate, DoNothing, Overhead}
+    public enum CameraMode { Chase, ChaseCinematic, Stay, ZipToLinear, ZipToDecelerate, DoNothing, Overhead, Orbit, ZipToOrbit, ChaseSlow}
     public bool cameraLooksAtCharacter = true;
     [Tooltip("For VR Only. Set this to the axis perpendicular to the horizon.")]public Vector3 cameraLookAxes;
     public CameraMode currentCameraMode = CameraMode.Chase;
@@ -109,6 +109,7 @@ public class PlayerMovement : MonoBehaviour
     public bool onDesertedGoal = false;
     public bool GetCharacterFromPersistentData;
     public float Horizontal, Vertical, Fire1, Fire2, Fire3, RightStickHorizontal, RightStickVertical;
+    public CapsuleCollider orbitObject;
     void Start()
     {
         sndPlayable = true;
@@ -705,7 +706,7 @@ public class PlayerMovement : MonoBehaviour
                 transform.position +
                 transform.TransformDirection(new Vector3(
                     Mathf.Clamp(speed2.x / 16, -4, 4),
-                    Mathf.Clamp(vspeed / 32, -1, 0),
+                    0, //Mathf.Clamp(vspeed / 32, -1, 0),
                     Mathf.Clamp(speed2.y / 16, -4, 4))) + Vector3.up * 0.5f);
                 cameraT.localEulerAngles = new Vector3(
                     MathF.Round(cameraT.localEulerAngles.x / 200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.x,
@@ -780,11 +781,49 @@ public class PlayerMovement : MonoBehaviour
                     cameraT.position = Vector3.Lerp( zipStartPos, CameraZipTarget, 0.5f*( 1-Mathf.Cos(Mathf.PI*CameraZipPercentage) ) );
                     if(CameraZipPercentage>=1) { currentCameraMode = CameraMode.Stay; }
                     break;
+                case CameraMode.ZipToOrbit:
+                    Vector3 orbitCenterZip = orbitObject.transform.position + (orbitObject.center);
+                    orbitCenterZip.y = transform.position.y;
+                    Vector3 OZipTarget = (transform.position - orbitCenterZip).normalized * orbitObject.radius * 2f;
+                    OZipTarget += orbitCenterZip + (Vector3.up * camHeight);
+
+                    if (!cameraLooksAtCharacter) { cameraT.LookAt(CameraZipLookAtTarget); }
+                    if (CameraZipPercentage <= 0) { zipStartPos = cameraT.position; }
+                    CameraZipPercentage += (Time.fixedDeltaTime/1);
+                    CameraZipPercentage = Mathf.Clamp01(CameraZipPercentage);
+                    cameraT.position = Vector3.Lerp(zipStartPos, (OZipTarget), 0.5f * (1 - Mathf.Cos(Mathf.PI * CameraZipPercentage)));
+                    if (CameraZipPercentage >= 1) { currentCameraMode = CameraMode.Orbit; }
+                    break;
                 case CameraMode.DoNothing:
                     break;
                 case CameraMode.Overhead:
                     cameraT.position = transform.position + (Vector3.up * 15) + (Vector3.forward * -15);
                     break;
+                case CameraMode.Orbit:
+                    Vector3 orbitCenter = orbitObject.transform.position + (orbitObject.center);
+                    orbitCenter.y = transform.position.y;
+                    cameraT.position = (transform.position - orbitCenter).normalized * orbitObject.radius*2f;
+                    cameraT.position += orbitCenter + (Vector3.up *camHeight);
+                    break;
+                case CameraMode.ChaseSlow:
+                    characterHorizontalPosition = new Vector2(transform.position.x, transform.position.z);
+                    horizontalCameraOffset = new Vector2(cameraT.position.x, cameraT.position.z) - characterHorizontalPosition;
+                    //horizontalCameraOffset = horizontalCameraOffset.normalized * (0- camDist);
+                    //Debug.Log(horizontalCameraOffset.magnitude);
+                    if (horizontalCameraOffset.magnitude > camDist)
+                    {
+                        cameraT.Translate(Vector3.forward * Time.fixedDeltaTime*3f);
+                        cameraT.position = new Vector3(cameraT.position.x, transform.position.y + camHeight, cameraT.position.z);
+                        //cameraT.position = new Vector3(horizontalCameraOffset.x + characterHorizontalPosition.x, transform.position.y + camHeight, horizontalCameraOffset.y + characterHorizontalPosition.y);
+                    }
+                    else
+                    { currentCameraMode = CameraMode.Chase; }
+                    //{ cameraT.position = new Vector3(cameraT.position.x, transform.position.y + camHeight, cameraT.position.z); }
+                    CameraZipPercentage = 0f;
+                    if (cameraLooksAtCharacter)
+                    { OrbitCamera(horizontalCameraOffset); }
+                    break;
+
                 default:
                     throw new NotImplementedException();
             }
