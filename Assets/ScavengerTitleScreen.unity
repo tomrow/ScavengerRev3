@@ -313,7 +313,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (A) Start
+  m_text: '(A)
+
+    Start'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2e2e2cfa735ade34da1adec2b00e2d68, type: 2}
   m_sharedMaterial: {fileID: -4845555844546454003, guid: 2e2e2cfa735ade34da1adec2b00e2d68, type: 2}
@@ -566,7 +568,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (B) Credits
+  m_text: '(B)
+
+    READ ME'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2e2e2cfa735ade34da1adec2b00e2d68, type: 2}
   m_sharedMaterial: {fileID: -4845555844546454003, guid: 2e2e2cfa735ade34da1adec2b00e2d68, type: 2}

@@ -2728,6 +2728,7 @@ MonoBehaviour:
   persistentStorage: {fileID: 0}
   DisableSpinAttack: 0
   SpinAttackOnGnd: 0
+  SlowDownAfterSpinAtk: 1
   onDesertedGoal: 0
   GetCharacterFromPersistentData: 0
   Horizontal: 0

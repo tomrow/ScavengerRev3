@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 initialHitBoxWidth;
     public bool DisableSpinAttack;
     public bool SpinAttackOnGnd;
-
+    public bool SlowDownAfterSpinAtk;
 
 
     public bool onDesertedGoal = false;
@@ -138,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         stepSnd = debugCube.Find("Sound").Find("StepSoft").gameObject.GetComponent<AudioSource>();
         
         persistentStorage = GameObject.FindWithTag("ScavengerPersistentStorage").GetComponent<ScavengerPersistentData>();
-        Debug.Log(persistentStorage);
+        Debug.Log(persistentStorage); Debug.Log(characterName);
         if (GetCharacterFromPersistentData) { characterName = persistentStorage.currentCharacter; }
         if (persistentStorage == null) { Debug.Log("Error, making new Persistent Storage"); persistentStorage = Instantiate(persistentStoragePrefab).GetComponent<ScavengerPersistentData>(); characterName = "Alan"; }
 
@@ -359,6 +359,8 @@ public class PlayerMovement : MonoBehaviour
         {
             //Debug.Log("Ray was cast downward, and we got a hit! Switching back to running mode");
             playerActionMode = stunTimer>0 ? Modes.Knockback : reachGround;
+            speed2 *= 0.75f;
+            pushAngleDeg = (Mathf.Atan2(speed2.x, speed2.y)) * Mathf.Rad2Deg;
             stepSnd.Play();
             if (input2.magnitude < 0.15f) { speed2 *= 0f; }
             transform.position = touchRay.point;
@@ -391,7 +393,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 preinputmag = input2 * runSpeed; //Multiply to reach intended speed values for later math
         float pushAngle = (Mathf.Atan2(input2.x, input2.y)) + (cameraT.eulerAngles.y * Mathf.Deg2Rad) % 360; //Get stick angle and add camera angle to it, so that forwards is always forwards relative to camera
         targetTravelAngleDeg = pushAngle * Mathf.Rad2Deg;
-        pushAngleDeg = pushAngle * Mathf.Rad2Deg;
+        //pushAngleDeg = pushAngle * Mathf.Rad2Deg;
         Vector2 inputmag = new Vector2(Mathf.Sin(pushAngle), Mathf.Cos(pushAngle)); //prevent weird rotational stumblings re. MoveCharacter4Tic
         inputmag = inputmag.normalized * (preinputmag.magnitude);
         inputmag.x = (float)(Mathf.Round(inputmag.x * 10000f) / 10000);
@@ -738,8 +740,8 @@ public class PlayerMovement : MonoBehaviour
                     {
                         dist = cameraT.position - transform.position;
                         cameraT.Translate(Vector3.forward * (0 - Mathf.Abs(dist.magnitude - camDist)) );
-                        Debug.Log("Camera is too close to character");
-                        Debug.Log(dist.magnitude);
+                        //Debug.Log("Camera is too close to character");
+                        //Debug.Log(dist.magnitude);
                     }
                     break;
                 case CameraMode.ChaseCinematic:
@@ -852,7 +854,7 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log(playerActionMode);
                 //death
                 deathTimer += Time.fixedDeltaTime;
-                if ((characterName == "Robot" || characterName == "Craig") && animatorStateInfo.IsName("knockBack") && animatorStateInfo.normalizedTime > 0.5f && !explosionSpawned)
+                if ((characterName == "Robot" || characterName == "Craig" || characterName == "DesertedHmn") && animatorStateInfo.IsName("knockBack") && animatorStateInfo.normalizedTime > 0.5f && !explosionSpawned)
                 { Instantiate(robotDeathExplosionPrefab, transform.position, Quaternion.identity); Debug.Log("Boom"); explosionSpawned = true; characterAnimator.gameObject.SetActive(false); }
                 if (deathTimer > deathTimerMax)
                 {
@@ -903,7 +905,7 @@ public class PlayerMovement : MonoBehaviour
                 CollideCeilingTic();
                 CollideFloorSpinAttackTic();
                 if (animatorStateInfo.IsName("spin") && animatorStateInfo.normalizedTime > 0.9f)
-                { playerActionMode = Modes.Falling; vspeed = 0f; hitBox.size = initialHitBoxWidth; }
+                { playerActionMode = Modes.Falling; vspeed = 0f; hitBox.size = initialHitBoxWidth; if (SlowDownAfterSpinAtk) { speed2 *= 0.2f; } }
                 break;
             case Modes.WalkingPostSpin: //this mode is just the walking mode but without the jump cmd, so that exiting from a midair spin doesnt allow you to jump in midair on the first frame
                 //running

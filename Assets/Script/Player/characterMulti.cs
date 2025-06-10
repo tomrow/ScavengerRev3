@@ -45,13 +45,17 @@ public class characterMulti : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        lineRenderer.SetPosition(0, characters[0].transform.position);
-        lineRenderer.SetPosition(1, characters.Length > 1 ? characters[1].transform.position : characters[0].transform.position);
-        lineRenderer.enabled = characters.Length > 1;
-        scrollTimer += Time.deltaTime;
-        if (scrollTimer > 1) { scrollTimer -= 1; }
-        line.mainTextureOffset = new Vector2(scrollTimer, 0);
-        if (blobWideness > 2.5f) { blobWideness -= Time.deltaTime; }
+        if (lineRenderer != null)
+        {
+            lineRenderer.SetPosition(0, characters[0].transform.position);
+            lineRenderer.SetPosition(1, characters.Length > 1 ? characters[1].transform.position : characters[0].transform.position);
+            lineRenderer.enabled = characters.Length > 1;
+            scrollTimer += Time.deltaTime;
+            if (scrollTimer > 1) { scrollTimer -= 1; }
+            line.mainTextureOffset = new Vector2(scrollTimer, 0);
+            if (blobWideness > 2.5f) { blobWideness -= Time.deltaTime; }
+        }
+        
 
 
         if (phys.stunTimer <= 0.01f)

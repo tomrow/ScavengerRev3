@@ -67,6 +67,7 @@ MonoBehaviour:
   Characters:
   - Alan
   - Robot
+  - beans
   caps: 0
   boxes: 0
   currentCharacter: Alan

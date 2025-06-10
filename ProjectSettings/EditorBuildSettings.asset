@@ -26,6 +26,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ScavengerCredits.unity
     guid: 55459853a9402304badacba4861f43a8
+  - enabled: 1
+    path: Assets/Scenes 1/SpaceShip.unity
+    guid: 749012f74031835449657d2ed6aadcdf
+  - enabled: 1
+    path: Assets/Scenes 1/ScavengerGimmickCameraTest.unity
+    guid: d5aa281cb2cdbd74481bd5b173df8235
+  - enabled: 1
+    path: Assets/shuck.unity
+    guid: 445f77bc612b81545a4fb01fae654113
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 1a4c68ca72a83449f938d669337cb305, type: 2}
