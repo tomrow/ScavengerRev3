@@ -23,7 +23,7 @@ public class RisingDoor : MonoBehaviour
     {
         origin = transform.localPosition;
         explode = explosion != null; //if there is an explosion prefab selected, treat the door as rigged to blow
-        scale = transform.InverseTransformDirection(Vector3.forward).magnitude;
+        scale = transform.InverseTransformVector(Vector3.forward).magnitude;
     }
     
     // Update is called once per frame

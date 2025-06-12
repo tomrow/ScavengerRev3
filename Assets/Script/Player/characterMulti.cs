@@ -78,7 +78,7 @@ public class characterMulti : MonoBehaviour
                 //Debug.Log(phys.gameObject.transform.Find("body").forward);
                 if (Input.GetButtonDown("Fire2"))
                 {
-                    Instantiate(sGunBlast, characters[activeCharacter].transform.position, characters[activeCharacter].transform.Find("body").rotation);
+                    GameObject blast = Instantiate(sGunBlast, characters[activeCharacter].transform.position, characters[activeCharacter].transform.Find("body").rotation);
                     Instantiate(sGunBlastParticles, characters[activeCharacter].transform.position, characters[activeCharacter].transform.Find("body").rotation);
                     phys.stunTimer = 20;
                     phys.playerActionMode = PlayerMovement.Modes.Knockback;

@@ -13,7 +13,7 @@ public class billboardQuad : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(Camera.main.transform.position);
-        transform.Rotate(0, 180, 0);
+        transform.eulerAngles = (Camera.main.transform.eulerAngles);
+        //transform.Rotate(0, 180, 0);
     }
 }

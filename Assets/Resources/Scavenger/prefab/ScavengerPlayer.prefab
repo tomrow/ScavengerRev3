@@ -2692,7 +2692,7 @@ MonoBehaviour:
   gndAccelleration: 0.49
   airAccelleration: 0.1
   gndFriction: 0.99
-  airFriction: 0.9
+  airFriction: 0.85
   cameraT: {fileID: 0}
   speed2: {x: 0, y: 0}
   vspeed: 0
@@ -2738,6 +2738,7 @@ MonoBehaviour:
   Fire3: 0
   RightStickHorizontal: 0
   RightStickVertical: 0
+  orbitObject: {fileID: 0}
 --- !u!114 &8113234533985866445
 MonoBehaviour:
   m_ObjectHideFlags: 0

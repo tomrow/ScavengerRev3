@@ -388,7 +388,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private void MoveCharacterDuringFreeFall2Tic()
+    private void MoveCharacterDuringFreeFall2Tic(bool drag)
     {
         input2 = new Vector2(Horizontal, Vertical); //Stick position
         Vector2 preinputmag = input2 * runSpeed; //Multiply to reach intended speed values for later math
@@ -401,8 +401,9 @@ public class PlayerMovement : MonoBehaviour
         inputmag.y = (float)(Mathf.Round(inputmag.y * 10000f) / 10000); //4 decimal places
 
         if (Vector2.Angle(speed2, inputmag) > 100)//if the stick is being held the opposite direction to the movement direction, brake
-        { speed2 *= airFriction; } //Debug.Log("Air Braking"); }
-
+        { speed2 *= airFriction*0.8f; } //Debug.Log("Air Braking"); }
+        if(drag && inputmag.magnitude<speed2.magnitude)
+        { speed2 *= airFriction; }
         Vector2 forceAdd = inputmag.normalized * (hspeed * 1.4f);
         
         speed2.x += ((inputmag.x - speed2.x) * airAccelleration) * Time.fixedDeltaTime; //add player input movement
@@ -700,24 +701,7 @@ public class PlayerMovement : MonoBehaviour
         if(currentCameraMode!=CameraMode.DoNothing){
             Vector2 characterHorizontalPosition = new Vector2(transform.position.x, transform.position.z); ;
             Vector2 horizontalCameraOffset = new Vector2(cameraT.position.x, cameraT.position.z) - characterHorizontalPosition;
-            if (cameraLooksAtCharacter)
-            {
-                cameraT.LookAt(
-                transform.position +
-                transform.TransformDirection(new Vector3(
-                    Mathf.Clamp(speed2.x / 16, -4, 4),
-                    0, //Mathf.Clamp(vspeed / 32, -1, 0),
-                    Mathf.Clamp(speed2.y / 16, -4, 4))) + Vector3.up * 0.5f);
-                cameraT.localEulerAngles = new Vector3(
-                    MathF.Round(cameraT.localEulerAngles.x / 200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.x,
-                    MathF.Round(cameraT.localEulerAngles.y / 200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.y,
-                    MathF.Round(cameraT.localEulerAngles.z / 200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.z);
-                //cameraT.position = new Vector3(
-                //    MathF.Round(cameraT.position.x / 200, 3, MidpointRounding.ToEven) * 200,
-                //    MathF.Round(cameraT.position.y / 200, 3, MidpointRounding.ToEven) * 200,
-                //    MathF.Round(cameraT.position.z / 200, 3, MidpointRounding.ToEven) * 200);
-
-            }
+            
             switch (currentCameraMode)
             {
                 case CameraMode.Chase:
@@ -828,7 +812,25 @@ public class PlayerMovement : MonoBehaviour
                     throw new NotImplementedException();
             }
         }
-        
+        if (cameraLooksAtCharacter)
+        {
+            cameraT.LookAt(
+            transform.position +
+            transform.TransformDirection(new Vector3(
+                0, 0, 0)));
+            //Mathf.Clamp(speed2.x / 16, -4, 4),
+            //0, //Mathf.Clamp(vspeed / 32, -1, 0),
+            //Mathf.Clamp(speed2.y / 16, -4, 4))) + Vector3.up * 0.5f);
+            cameraT.localEulerAngles = new Vector3(
+                MathF.Round(cameraT.localEulerAngles.x / 200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.x,
+                MathF.Round(cameraT.localEulerAngles.y / 200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.y,
+                MathF.Round(cameraT.localEulerAngles.z / 200, 4, MidpointRounding.ToEven) * 200 * cameraLookAxes.z);
+            //cameraT.position = new Vector3(
+            //    MathF.Round(cameraT.position.x / 200, 3, MidpointRounding.ToEven) * 200,
+            //    MathF.Round(cameraT.position.y / 200, 3, MidpointRounding.ToEven) * 200,
+            //    MathF.Round(cameraT.position.z / 200, 3, MidpointRounding.ToEven) * 200);
+
+        }
 
         animatorMesh.SetInteger("mode", (int)playerActionMode);
         animatorStateInfo = animatorMesh.GetCurrentAnimatorStateInfo(0); //get animation timer for animation dependent modes (knockback only ends once alan hits the floor, and only then can he get up)
@@ -876,7 +878,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case Modes.Falling:
                 //falling
-                MoveCharacterDuringFreeFall2Tic();
+                MoveCharacterDuringFreeFall2Tic(true);
                 CollideFloorFreeFallTic(false, Modes.WalkingOrIdle);
                 CollideWallTic();
                 CollideCeilingTic();
@@ -914,7 +916,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case Modes.Jumping:
                 //jumping upward animation hack
-                MoveCharacterDuringFreeFall2Tic();
+                MoveCharacterDuringFreeFall2Tic(true);
                 CollideFloorFreeFallTic(Fire1 > 0.8f, Modes.WalkingOrIdle);
                 if (!DisableSpinAttack) { SpinAttack(); }
                 CollideWallTic();
@@ -939,7 +941,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case Modes.SpinAttack:
                 hitBox.size = initialHitBoxWidth + new Vector3(1.2f,0,1.2f);
-                MoveCharacterDuringFreeFall2Tic();
+                MoveCharacterDuringFreeFall2Tic(false);
                 CollideWallTic();
                 CollideCeilingTic();
                 CollideFloorSpinAttackTic();
@@ -959,7 +961,9 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case Modes.SecretDance:
                 invulnSeconds = 3;
-                characterAnimator.localEulerAngles = Vector3.up * (cameraT.transform.localEulerAngles.y + 180);
+                characterAnimator.LookAt(cameraT);
+                characterAnimator.localEulerAngles = Vector3.up * characterAnimator.localEulerAngles.y;
+                //characterAnimator.localEulerAngles = Vector3.up * (cameraT.transform.localEulerAngles.y + 180);
                 speed2 = Vector2.zero;
                 if (animatorStateInfo.IsName("success") && animatorStateInfo.normalizedTime > 0.99f)
                 {

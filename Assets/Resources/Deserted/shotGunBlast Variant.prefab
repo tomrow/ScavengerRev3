@@ -14,15 +14,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 588edc159dbd8e242b9a9cf56a539af1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 170
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 588edc159dbd8e242b9a9cf56a539af1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 170
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 588edc159dbd8e242b9a9cf56a539af1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 350
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 588edc159dbd8e242b9a9cf56a539af1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -137,7 +137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5cc69185a82cfd49b4814476892b5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platform: {fileID: 3898323620614014287, guid: b805c1dfaa066ba478587214670b44bb, type: 3}
+  platform: {fileID: 3898323620614014287, guid: b3ac371e94a65474abc7560793dfcd18, type: 3}
+  robot: {fileID: 0}
 --- !u!65 &727247734674749240
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -157,5 +158,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 11.78, y: 0.0508, z: 0.0254}
-  m_Center: {x: 0, y: 0, z: 0.0127}
+  m_Size: {x: 3, y: 6, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}
