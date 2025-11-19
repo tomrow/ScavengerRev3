@@ -6584,7 +6584,9 @@ MonoBehaviour:
   bonesModel: {fileID: 957896756}
   animatorMesh: {fileID: 316674493}
   animMode: 0
+  hiding: 1
   speed: 0
+  relocate: 0
 --- !u!195 &253144029
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -10609,6 +10611,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8113234533985866452, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1058392133}
+    - targetCorrespondingSourceObject: {fileID: 8113234533985866452, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1058392134}
     - targetCorrespondingSourceObject: {fileID: 5983547554024873207, guid: a8763c8d9d48da949a9e610dd01ad5b4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1433078617}
@@ -11888,6 +11893,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1524320922}
   m_SourcePrefab: {fileID: 100100000, guid: bb930dd9b59e2e447988548c01968429, type: 3}
+--- !u!4 &1022935980 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4860053890910920361, guid: bb930dd9b59e2e447988548c01968429, type: 3}
+  m_PrefabInstance: {fileID: 1022935979}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1023283334
 GameObject:
   m_ObjectHideFlags: 0
@@ -12539,6 +12549,21 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1058392134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058392126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 540a6734f65c886468946c6d0cd884ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Character: {fileID: 0}
+  cameraT: {fileID: 1022935980}
+  currentCameraMode: 0
 --- !u!1 &1059499972
 GameObject:
   m_ObjectHideFlags: 0

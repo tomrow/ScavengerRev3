@@ -24,6 +24,6 @@ public class ScavengerTitleScreenActions : MonoBehaviour
 
     public void ShowCredits()
     {
-        SceneManager.LoadScene("ScavengerCredits");
+        SceneManager.LoadScene("SpaceShip");
     }
 }
