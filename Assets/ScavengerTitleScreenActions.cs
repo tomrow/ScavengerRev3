@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class ScavengerTitleScreenActions : MonoBehaviour
 {
     public void StartScavengerDemo()
-    { SceneManager.LoadScene("DTutorial"); }
+    { SceneManager.LoadScene("SpaceShip"); }
     private void FixedUpdate()
     {
         Camera.main.transform.Rotate(0.2f, 0.2f, 0);

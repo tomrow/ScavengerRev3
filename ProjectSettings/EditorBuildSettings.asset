@@ -35,6 +35,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/shuck.unity
     guid: 445f77bc612b81545a4fb01fae654113
+  - enabled: 1
+    path: Assets/towTest/towTest.unity
+    guid: c48653f5ab431f645a9342c84f3d33d0
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 1a4c68ca72a83449f938d669337cb305, type: 2}

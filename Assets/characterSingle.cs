@@ -7,14 +7,14 @@ public class characterSingle : MonoBehaviour
     public GameObject Character;
     public Transform cameraT;
     PlayerMovement phys;
-    public PlayerMovement.CameraMode currentCameraMode = PlayerMovement.CameraMode.Chase;
+    public PlayerMovement.CameraMode currentCameraMode;
     // Start is called before the first frame update
     void Start()
     {
         Character = gameObject;
         phys = gameObject.GetComponent<PlayerMovement>();
-        phys.currentCameraMode = PlayerMovement.CameraMode.Chase;
-        phys.cameraLooksAtCharacter = true;
+        phys.currentCameraMode = currentCameraMode;
+        //phys.cameraLooksAtCharacter = true;
     }
 
     // Update is called once per frame

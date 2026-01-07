@@ -781,7 +781,8 @@ public class PlayerMovement : MonoBehaviour
                 case CameraMode.DoNothing:
                     break;
                 case CameraMode.Overhead:
-                    cameraT.position = transform.position + (Vector3.up * 15) + (Vector3.forward * -15);
+                    cameraT.position = transform.position + (Vector3.up * camDist) + (Vector3.back * camDist);
+                    cameraLooksAtCharacter = false;
                     break;
                 case CameraMode.Orbit:
                     Vector3 orbitCenter = orbitObject.transform.position + (orbitObject.center);

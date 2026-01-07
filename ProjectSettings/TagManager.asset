@@ -17,6 +17,10 @@ TagManager:
   - blob
   - CorruptionPlatform
   - goal
+  - Bricks
+  - Hook
+  - metal
+  - wood
   layers:
   - Default
   - TransparentFX

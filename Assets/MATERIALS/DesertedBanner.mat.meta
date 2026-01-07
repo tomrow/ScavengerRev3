@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< Updated upstream:Assets/MATERIALS/DesertedBanner.mat.meta
 guid: dbc703409b67b8044ba213462ffb8365
 NativeFormatImporter:
+========
+guid: 9ef04274f45ea3b4383c2045226907e1
+DefaultImporter:
+>>>>>>>> Stashed changes:Assets/curtainSurface.pdn.meta
   externalObjects: {}
   mainObjectFileID: 2100000
   userData: 
