@@ -27,8 +27,7 @@ public class PlayerMovement : MonoBehaviour
     float stickPushedFromCenter;
     public Modes playerActionMode = Modes.WalkingOrIdle;
     public float stunTimer;
-    public enum Modes
-    {
+    public enum Modes {
         WalkingOrIdle = 0,
         SpinAttack = 1,
         Knockback = 2,
